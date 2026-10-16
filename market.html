@@ -24,76 +24,68 @@
     <div class="container">
       <h1 class="section-title">Market</h1>
       <p class="section-subtitle">
-        Snapshot view of selected assets and indicators.
+        Gold, silver, metals, and U.S. debt snapshot.
       </p>
 
       <div class="grid grid-2">
         <div class="card">
-          <h3>Commodities</h3>
-
-          <div class="market-item">
-            <div>
-              <div class="asset-name">Gold</div>
-              <div class="asset-meta">Spot / futures snapshot</div>
+          <h3>U.S. National Debt</h3>
+          <p class="section-subtitle">Official Treasury daily data</p>
+          <div id="debt-box">
+            <div class="market-item">
+              <div>
+                <div class="asset-name">Total Public Debt Outstanding</div>
+                <div class="asset-meta">Source: U.S. Treasury Fiscal Data</div>
+              </div>
+              <div class="price" id="us-debt-value">Loading...</div>
             </div>
-            <div class="price">Loading...</div>
-          </div>
-
-          <div class="market-item">
-            <div>
-              <div class="asset-name">Silver</div>
-              <div class="asset-meta">Spot / futures snapshot</div>
-            </div>
-            <div class="price">Loading...</div>
-          </div>
-
-          <div class="market-item">
-            <div>
-              <div class="asset-name">Oil</div>
-              <div class="asset-meta">WTI / Brent snapshot</div>
-            </div>
-            <div class="price">Loading...</div>
+            <p class="meta" id="us-debt-date">Fetching latest available date...</p>
           </div>
         </div>
 
         <div class="card">
-          <h3>Macro & FX</h3>
+          <h3>Metals Overview</h3>
+          <p class="section-subtitle">Live market widget</p>
 
-          <div class="market-item">
-            <div>
-              <div class="asset-name">US 10Y Yield</div>
-              <div class="asset-meta">Treasury benchmark</div>
-            </div>
-            <div class="price">Loading...</div>
-          </div>
+          <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-market-overview.js"></script>
 
-          <div class="market-item">
-            <div>
-              <div class="asset-name">USD/EUR</div>
-              <div class="asset-meta">Exchange rate</div>
-            </div>
-            <div class="price">Loading...</div>
-          </div>
-
-          <div class="market-item">
-            <div>
-              <div class="asset-name">S&P 500</div>
-              <div class="asset-meta">Equity index snapshot</div>
-            </div>
-            <div class="price">Loading...</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="card">
-          <h3>Market widget area</h3>
-          <p class="section-subtitle">
-            We can embed a market widget or public data block here.
-          </p>
-          <div class="placeholder-box">
-            Widget will go here in the next step.
-          </div>
+          <tv-market-overview
+            color-theme="light"
+            locale="en"
+            width="100%"
+            height="420"
+            date-range="12M"
+            show-chart="true"
+            is-transparent="true"
+            symbol-sectors='[
+              {
+                "sectionName":"Metals",
+                "symbols":[
+                  "TVC:GOLD",
+                  "TVC:SILVER",
+                  "CAPITALCOM:PLATINUM",
+                  "CAPITALCOM:PALLADIUM",
+                  "TVC:COPPER"
+                ]
+              },
+              {
+                "sectionName":"Energy",
+                "symbols":[
+                  "TVC:USOIL",
+                  "TVC:UKOIL",
+                  "NYMEX:NG1!"
+                ]
+              },
+              {
+                "sectionName":"Major Markets",
+                "symbols":[
+                  "FOREXCOM:SPXUSD",
+                  "FX:EURUSD",
+                  "TVC:US10Y"
+                ]
+              }
+            ]'>
+          </tv-market-overview>
         </div>
       </div>
     </div>
@@ -104,5 +96,38 @@
       <p>© 2026 Christa Vakoli</p>
     </div>
   </footer>
+
+  <script>
+    async function loadDebtData() {
+      const debtValue = document.getElementById("us-debt-value");
+      const debtDate = document.getElementById("us-debt-date");
+
+      try {
+        const response = await fetch("https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny?sort=-record_date&page[size]=1");
+        const data = await response.json();
+
+        if (data.data && data.data.length > 0) {
+          const latest = data.data[0];
+          const amount = Number(latest.tot_pub_debt_out_amt);
+          const formatted = amount.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0
+          });
+
+          debtValue.textContent = formatted;
+          debtDate.textContent = "Latest available Treasury date: " + latest.record_date;
+        } else {
+          debtValue.textContent = "Unavailable";
+          debtDate.textContent = "No data returned.";
+        }
+      } catch (error) {
+        debtValue.textContent = "Unavailable";
+        debtDate.textContent = "Could not load Treasury data right now.";
+      }
+    }
+
+    loadDebtData();
+  </script>
 </body>
 </html>
