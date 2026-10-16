@@ -239,8 +239,16 @@ img {
 
 /* Footer */
 .site-footer {
-  padding: 20px 0 30px;
+  position: relative;
+  z-index: 3;
+  padding: 24px 0 40px;
   font-size: 0.95rem;
+  color: rgba(180, 255, 180, 0.55);
+  background: transparent;
+}
+
+.site-footer p {
+  margin: 0;
 }
 
 /* Homepage matrix only */
@@ -248,7 +256,7 @@ img {
   background: #000;
   color: #eaffea;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
   position: relative;
 }
 
