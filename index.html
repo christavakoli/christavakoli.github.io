@@ -7,9 +7,9 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="home-dark">
-  <header class="site-header hero-header">
+  <header class="hero-header">
     <div class="hero-image-wrap">
-      <img src="backgroundpic1.jpeg" alt="Header background" class="hero-top-image" />
+      <img src="backgroundpic1.jpeg" alt="Header artwork" class="hero-top-image" />
       <div class="hero-image-overlay"></div>
     </div>
 
@@ -59,7 +59,7 @@
 
     resizeCanvas();
 
-    const letters = "アァイィウヴエカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const chars = letters.split("");
 
     const fontSize = 16;
@@ -72,7 +72,7 @@
     }
 
     function drawMatrix() {
-      ctx.fillStyle = "rgba(3, 10, 8, 0.08)";
+      ctx.fillStyle = "rgba(0, 10, 0, 0.08)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.fillStyle = "#39ff14";
