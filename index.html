@@ -43,16 +43,21 @@
     const canvas = document.getElementById("matrixCanvas");
     const ctx = canvas.getContext("2d");
 
-    const letters = "アァイィウヴエカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const chars = letters.split("");
-    const fontSize = 16;
-
-    let columns = 0;
-    let drops = [];
-
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+
+    const letters = "アァイィウヴエカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const chars = letters.split("");
+
+    const fontSize = 16;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
+
+    function resetMatrix() {
       columns = Math.floor(canvas.width / fontSize);
       drops = Array(columns).fill(1);
     }
@@ -79,9 +84,12 @@
       }
     }
 
-    resizeCanvas();
     setInterval(drawMatrix, 50);
-    window.addEventListener("resize", resizeCanvas);
+
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      resetMatrix();
+    });
   </script>
 </body>
 </html>
