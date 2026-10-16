@@ -277,3 +277,14 @@ a {
     padding-top: 60px;
   }
 }
+#fx-rates-list {
+  margin-top: 10px;
+}
+
+#fx-rates-list .market-item {
+  padding: 14px 0;
+}
+
+.price {
+  text-align: right;
+}
