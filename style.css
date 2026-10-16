@@ -1,3 +1,12 @@
+.home-dark {
+  background: #000000;
+  color: #e8eefc;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
 :root {
   --bg: #f7f7f8;
   --surface: #ffffff;
@@ -13,8 +22,7 @@
 * {
   box-sizing: border-box;
 }
-
-html {
+@@ -17,24 +18,225 @@ html {
   scroll-behavior: smooth;
 }
 
@@ -35,6 +43,7 @@ img {
 }
 
 .container {
+  width: min(92%, 1100px);
   width: min(92%, var(--max-width));
   margin: 0 auto;
 }
@@ -236,40 +245,63 @@ img {
   height: 100%;
   display: block;
   z-index: 0;
+  background: #000000;
   background: #000;
 }
 
 .matrix-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
+@@ -44,28 +246,13 @@ a {
   pointer-events: none;
   background:
     radial-gradient(circle at center, rgba(57, 255, 20, 0.04), transparent 45%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.38));
     linear-gradient(to bottom, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.30));
 }
 
+.site-header {
 .home-header {
   position: relative;
   z-index: 3;
+  background: transparent;
+  border-bottom: none;
+}
+
+.hero-header {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 0;
   width: 100%;
 }
 
 .nav-dark {
-  position: relative;
-  z-index: 3;
-}
-
-.logo-image-link {
-  display: inline-flex;
-  align-items: center;
+@@ -79,62 +266,54 @@ a {
 }
 
 .site-logo-image {
+  width: 58px;
+  height: 58px;
   width: 44px;
   height: 44px;
   object-fit: cover;
   object-position: center;
+  border-radius: 10px;
+  border: 1px solid rgba(57, 255, 20, 0.16);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 16px rgba(57, 255, 20, 0.08);
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
   border-radius: 8px;
   border: 1px solid rgba(57, 255, 20, 0.15);
   background: rgba(0, 0, 0, 0.55);
@@ -278,52 +310,70 @@ img {
 
 .nav-links-dark a {
   color: rgba(220, 255, 220, 0.78);
+  font-weight: 500;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
 .nav-links-dark a:hover,
 .nav-links-dark a.active {
   color: #ffffff;
+  text-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
   text-shadow: 0 0 10px rgba(57, 255, 20, 0.18);
 }
 
+.hero-dark {
 .home-main {
   position: relative;
   z-index: 3;
+  flex: 1;
   min-height: calc(100vh - 110px);
   display: flex;
   align-items: center;
+  padding-top: 40px;
+  padding-bottom: 60px;
 }
 
+.hero-dark-content {
+  max-width: 680px;
 .hero-center {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
+.hero-dark-content h1 {
 .hero-center h1 {
   margin: 0;
+  font-size: clamp(3.2rem, 8vw, 6.5rem);
+  line-height: 0.95;
   font-size: clamp(3.5rem, 8vw, 7rem);
   line-height: 0.92;
   letter-spacing: -0.06em;
   color: #f5fff5;
   text-shadow:
+    0 0 14px rgba(57, 255, 20, 0.08),
+    0 0 36px rgba(57, 255, 20, 0.05);
     0 0 16px rgba(57, 255, 20, 0.08),
     0 0 40px rgba(57, 255, 20, 0.05);
 }
 
+.hero-dark-content p {
 .hero-center p {
   margin-top: 18px;
+  font-size: 1.1rem;
   font-size: 1rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: rgba(130, 255, 130, 0.78);
-}
-
+@@ -143,41 +322,45 @@ a {
 .footer-dark {
   position: relative;
   z-index: 3;
   color: rgba(180, 255, 180, 0.55);
   background: transparent;
+  color: rgba(180, 255, 180, 0.52);
+  border-top: none;
+  padding: 20px 0 30px;
 }
 
 .footer-dark p {
@@ -337,24 +387,34 @@ img {
     flex-direction: column;
   }
 
+  .site-logo-image {
+    width: 50px;
+    height: 50px;
   .grid-2,
   .grid-3 {
     grid-template-columns: 1fr;
   }
 
+  .hero-header {
+    min-height: calc(100vh - 40px);
   .site-logo-image {
     width: 40px;
     height: 40px;
   }
 
+  .hero-dark {
+    padding-bottom: 40px;
   .home-main {
     min-height: calc(100vh - 100px);
   }
 
+  .hero-dark-content h1 {
+    font-size: clamp(2.7rem, 12vw, 4.3rem);
   .hero-center h1 {
     font-size: clamp(2.8rem, 13vw, 4.8rem);
   }
 
+  .hero-dark-content p {
   .hero-center p {
     letter-spacing: 0.14em;
     font-size: 0.92rem;
