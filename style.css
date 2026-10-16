@@ -342,3 +342,12 @@ a {
     min-height: 320px;
   }
 }
+.widget-frame {
+  min-height: 520px;
+}
+
+@media (max-width: 900px) {
+  .widget-frame {
+    min-height: 420px;
+  }
+}
