@@ -7,40 +7,30 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="home-dark">
-  <header class="site-header hero-header">
-    <div class="hero-header-bg"></div>
+  <canvas id="matrixCanvas"></canvas>
+  <div class="matrix-overlay"></div>
 
+  <header class="home-header">
     <div class="container nav nav-dark">
       <a href="index.html" class="logo-image-link">
         <img src="logowebsite1.png" alt="Logo" class="site-logo-image" />
-        <div class="logo-frame">
-          <img src="logowebsite1.png" alt="Logo" class="site-logo-image" />
-        </div>
       </a>
 
       <nav class="nav-links nav-links-dark">
-@@ -32,27 +34,68 @@
+        <a href="index.html" class="active">Home</a>
+        <a href="market.html">Market</a>
+        <a href="forsale.html">For Sale</a>
+        <a href="blog.html">Blog</a>
+        <a href="projects.html">Projects</a>
+      </nav>
     </div>
   </header>
 
-  <main class="ocean-section">
-    <div class="ocean-glow"></div>
-
-    <div class="ocean-wave wave1"></div>
-    <div class="ocean-wave wave2"></div>
-    <div class="ocean-wave wave3"></div>
-
-    <div class="container ocean-text-wrap">
-      <div class="ocean-panel">
-        <h2>Signal Horizon</h2>
-        <p>
-          A dark interface for markets, writing, sale listings, and projects.
-        </p>
-      </div>
+  <main class="home-main">
+    <div class="container hero-center">
+      <h1>Welcome</h1>
+      <p>directory above</p>
     </div>
-  <main class="matrix-section">
-    <canvas id="matrixCanvas"></canvas>
-    <div class="matrix-overlay"></div>
   </main>
 
   <footer class="site-footer footer-dark">
@@ -55,7 +45,7 @@
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
-      canvas.height = Math.max(window.innerHeight * 0.42, 260);
+      canvas.height = window.innerHeight;
     }
 
     resizeCanvas();
@@ -67,13 +57,13 @@
     let columns = Math.floor(canvas.width / fontSize);
     let drops = Array(columns).fill(1);
 
-    function resetDrops() {
+    function resetMatrix() {
       columns = Math.floor(canvas.width / fontSize);
       drops = Array(columns).fill(1);
     }
 
     function drawMatrix() {
-      ctx.fillStyle = "rgba(3, 10, 8, 0.08)";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.fillStyle = "#39ff14";
@@ -98,7 +88,7 @@
 
     window.addEventListener("resize", () => {
       resizeCanvas();
-      resetDrops();
+      resetMatrix();
     });
   </script>
 </body>
