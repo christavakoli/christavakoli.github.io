@@ -24,7 +24,7 @@
     <div class="container">
       <h1 class="section-title">Market</h1>
       <p class="section-subtitle">
-        U.S. debt, metals, exchange rates, and broader market views.
+        U.S. debt, broader market views, and CAD-centered exchange rates.
       </p>
 
       <div class="market-stack">
@@ -48,64 +48,64 @@
           <p class="section-subtitle">Live TradingView market widget</p>
 
           <div class="widget-frame">
-  <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-market-overview.js"></script>
+            <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-market-overview.js"></script>
 
-  <tv-market-overview
-    color-theme="light"
-    locale="en"
-    width="100%"
-    height="520"
-    date-range="12M"
-    show-chart="true"
-    is-transparent="true"
-    symbol-sectors='[
-      {
-        "sectionName":"Indices",
-        "symbols":[
-          "FOREXCOM:SPXUSD",
-          "FOREXCOM:NSXUSD",
-          "FOREXCOM:DJI",
-          "FOREXCOM:UKXGBP"
-        ]
-      },
-      {
-        "sectionName":"Metals",
-        "symbols":[
-          "TVC:GOLD",
-          "TVC:SILVER",
-          "CAPITALCOM:PLATINUM",
-          "CAPITALCOM:PALLADIUM",
-          "TVC:COPPER"
-        ]
-      },
-      {
-        "sectionName":"Forex",
-        "symbols":[
-          "FX:USDCAD",
-          "FX:EURUSD",
-          "FX:GBPUSD",
-          "FX:USDJPY",
-          "FX:USDCHF",
-          "FX:AUDUSD"
-        ]
-      },
-      {
-        "sectionName":"Crypto",
-        "symbols":[
-          "BITSTAMP:BTCUSD",
-          "BITSTAMP:ETHUSD",
-          "CRYPTO:XRPUSD",
-          "BINANCE:SOLUSDT"
-        ]
-      }
-    ]'>
-  </tv-market-overview>
-</div>
+            <tv-market-overview
+              color-theme="light"
+              locale="en"
+              width="100%"
+              height="520"
+              date-range="12M"
+              show-chart="true"
+              is-transparent="true"
+              symbol-sectors='[
+                {
+                  "sectionName":"Indices",
+                  "symbols":[
+                    "FOREXCOM:SPXUSD",
+                    "FOREXCOM:NSXUSD",
+                    "FOREXCOM:DJI",
+                    "FOREXCOM:UKXGBP"
+                  ]
+                },
+                {
+                  "sectionName":"Metals",
+                  "symbols":[
+                    "TVC:GOLD",
+                    "TVC:SILVER",
+                    "TVC:COPPER",
+                    "TVC:USOIL"
+                  ]
+                },
+                {
+                  "sectionName":"Forex",
+                  "symbols":[
+                    "FX:USDCAD",
+                    "FX:EURUSD",
+                    "FX:GBPUSD",
+                    "FX:USDJPY",
+                    "FX:USDCHF",
+                    "FX:AUDUSD"
+                  ]
+                },
+                {
+                  "sectionName":"Crypto",
+                  "symbols":[
+                    "BITSTAMP:BTCUSD",
+                    "BITSTAMP:ETHUSD",
+                    "CRYPTO:XRPUSD",
+                    "BINANCE:SOLUSDT"
+                  ]
+                }
+              ]'>
+            </tv-market-overview>
+          </div>
+        </div>
 
         <div class="card card-tight">
-          <h3>USD Exchange Rates</h3>
+          <h3>CAD Exchange Rates</h3>
           <p class="section-subtitle">
-            Daily reference rates for major currencies and Iranian rial.
+            CAD compared with USD, Chinese yuan, Australian dollar, euro, British pound, and Iranian rial.
           </p>
 
           <div id="fx-rates-list">
@@ -158,81 +158,54 @@
       }
     }
 
-    async function loadExchangeRates() {
+    async function loadCadRates() {
       const fxList = document.getElementById("fx-rates-list");
       const fxDate = document.getElementById("fx-date");
 
-      const majorCurrencies = [
-        "EUR", "JPY", "GBP", "CAD", "CHF",
-        "AUD", "CNY", "INR", "AED", "TRY"
-      ];
+      const targets = ["USD", "CNY", "AUD", "EUR", "GBP", "IRR"];
 
-      const currencyNames = {
-        EUR: "Euro",
-        JPY: "Japanese Yen",
-        GBP: "British Pound",
-        CAD: "Canadian Dollar",
-        CHF: "Swiss Franc",
-        AUD: "Australian Dollar",
+      const names = {
+        USD: "U.S. Dollar",
         CNY: "Chinese Yuan",
-        INR: "Indian Rupee",
-        AED: "UAE Dirham",
-        TRY: "Turkish Lira",
+        AUD: "Australian Dollar",
+        EUR: "Euro",
+        GBP: "British Pound",
         IRR: "Iranian Rial"
       };
 
       try {
-        const majorResponse = await fetch(
-          "https://api.frankfurter.dev/v1/latest?from=USD&symbols=" + majorCurrencies.join(",")
+        const response = await fetch(
+          "https://api.frankfurter.dev/v1/latest?from=CAD&symbols=" + targets.join(",")
         );
-        const majorData = await majorResponse.json();
+        const data = await response.json();
 
-        let irrRate = null;
-        let fxDateValue = majorData.date || "";
+        fxList.innerHTML = "";
 
-        try {
-          const irrResponse = await fetch("https://api.frankfurter.dev/v1/latest?from=USD&symbols=IRR");
-          const irrData = await irrResponse.json();
-          if (irrData && irrData.rates && irrData.rates.IRR) {
-            irrRate = irrData.rates.IRR;
-            if (!fxDateValue && irrData.date) fxDateValue = irrData.date;
-          }
-        } catch (e) {
-          irrRate = null;
-        }
-
-        if (!majorData.rates) {
+        if (!data.rates) {
           fxList.innerHTML = "<p>Exchange rates unavailable right now.</p>";
           fxDate.textContent = "No FX data returned.";
           return;
         }
 
-        const allCodes = [...majorCurrencies, "IRR"];
-        fxList.innerHTML = "";
-
-        allCodes.forEach(code => {
-          const rate = code === "IRR" ? irrRate : majorData.rates[code];
-          const displayRate =
-            rate !== null && rate !== undefined
-              ? Number(rate).toLocaleString()
-              : "Unavailable";
+        targets.forEach(code => {
+          const rate = data.rates[code];
 
           const row = document.createElement("div");
           row.className = "market-item";
 
           row.innerHTML = `
             <div>
-              <div class="asset-name">USD / ${code}</div>
-              <div class="asset-meta">${currencyNames[code]}</div>
+              <div class="asset-name">CAD / ${code}</div>
+              <div class="asset-meta">${names[code]}</div>
             </div>
-            <div class="price">${displayRate}</div>
+            <div class="price">${rate !== undefined ? Number(rate).toLocaleString() : "Unavailable"}</div>
           `;
 
           fxList.appendChild(row);
         });
 
-        fxDate.textContent = fxDateValue
-          ? "Latest available FX date: " + fxDateValue
+        fxDate.textContent = data.date
+          ? "Latest available FX date: " + data.date
           : "Latest available FX date unavailable.";
       } catch (error) {
         fxList.innerHTML = "<p>Could not load exchange rates right now.</p>";
@@ -241,7 +214,7 @@
     }
 
     loadDebtData();
-    loadExchangeRates();
+    loadCadRates();
   </script>
 </body>
 </html>
