@@ -351,3 +351,57 @@ a {
     min-height: 420px;
   }
 }
+.logo {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.market-stack {
+  display: grid;
+  gap: 24px;
+}
+
+.widget-card {
+  padding: 18px;
+  overflow: hidden;
+}
+
+.widget-frame {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  min-height: 520px;
+}
+
+.card-tight {
+  padding: 18px;
+}
+
+.market-item {
+  align-items: flex-start;
+}
+
+.price {
+  text-align: right;
+  white-space: nowrap;
+}
+
+#fx-rates-list {
+  margin-top: 6px;
+}
+
+#fx-rates-list .market-item {
+  padding: 12px 0;
+}
+
+.section-subtitle {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 900px) {
+  .widget-frame {
+    min-height: 420px;
+  }
+}
