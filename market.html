@@ -24,23 +24,21 @@
     <div class="container">
       <h1 class="section-title">Market</h1>
       <p class="section-subtitle">
-        Gold, silver, metals, and U.S. debt snapshot.
+        U.S. debt, metals, and exchange rates.
       </p>
 
       <div class="grid grid-2">
         <div class="card">
           <h3>U.S. National Debt</h3>
           <p class="section-subtitle">Official Treasury daily data</p>
-          <div id="debt-box">
-            <div class="market-item">
-              <div>
-                <div class="asset-name">Total Public Debt Outstanding</div>
-                <div class="asset-meta">Source: U.S. Treasury Fiscal Data</div>
-              </div>
-              <div class="price" id="us-debt-value">Loading...</div>
+          <div class="market-item">
+            <div>
+              <div class="asset-name">Total Public Debt Outstanding</div>
+              <div class="asset-meta">Source: U.S. Treasury Fiscal Data</div>
             </div>
-            <p class="meta" id="us-debt-date">Fetching latest available date...</p>
+            <div class="price" id="us-debt-value">Loading...</div>
           </div>
+          <p class="meta" id="us-debt-date">Fetching latest available date...</p>
         </div>
 
         <div class="card">
@@ -67,25 +65,28 @@
                   "CAPITALCOM:PALLADIUM",
                   "TVC:COPPER"
                 ]
-              },
-              {
-                "sectionName":"Energy",
-                "symbols":[
-                  "TVC:USOIL",
-                  "TVC:UKOIL",
-                  "NYMEX:NG1!"
-                ]
-              },
-              {
-                "sectionName":"Major Markets",
-                "symbols":[
-                  "FOREXCOM:SPXUSD",
-                  "FX:EURUSD",
-                  "TVC:US10Y"
-                ]
               }
             ]'>
           </tv-market-overview>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="card">
+          <h3>USD Exchange Rates</h3>
+          <p class="section-subtitle">
+            Daily reference rates for major currencies and Iranian rial.
+          </p>
+
+          <div id="fx-rates-list">
+            <div class="market-item">
+              <div>
+                <div class="asset-name">Loading exchange rates...</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="meta" id="fx-date">Fetching latest available FX date...</p>
         </div>
       </div>
     </div>
@@ -93,7 +94,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>© 2026 Christa Vakoli</p>
+      <p>© 2026 Chris Tavakoli</p>
     </div>
   </footer>
 
@@ -119,7 +120,7 @@
           debtDate.textContent = "Latest available Treasury date: " + latest.record_date;
         } else {
           debtValue.textContent = "Unavailable";
-          debtDate.textContent = "No data returned.";
+          debtDate.textContent = "No debt data returned.";
         }
       } catch (error) {
         debtValue.textContent = "Unavailable";
@@ -127,7 +128,68 @@
       }
     }
 
+    async function loadExchangeRates() {
+      const fxList = document.getElementById("fx-rates-list");
+      const fxDate = document.getElementById("fx-date");
+
+      const currencies = [
+        "EUR", "JPY", "GBP", "CAD", "CHF",
+        "AUD", "CNY", "INR", "AED", "TRY", "IRR"
+      ];
+
+      const currencyNames = {
+        EUR: "Euro",
+        JPY: "Japanese Yen",
+        GBP: "British Pound",
+        CAD: "Canadian Dollar",
+        CHF: "Swiss Franc",
+        AUD: "Australian Dollar",
+        CNY: "Chinese Yuan",
+        INR: "Indian Rupee",
+        AED: "UAE Dirham",
+        TRY: "Turkish Lira",
+        IRR: "Iranian Rial"
+      };
+
+      try {
+        const response = await fetch(
+          "https://api.frankfurter.dev/v1/latest?base=USD&symbols=" + currencies.join(",")
+        );
+        const data = await response.json();
+
+        if (!data.rates) {
+          fxList.innerHTML = "<p>Exchange rates unavailable right now.</p>";
+          fxDate.textContent = "No FX data returned.";
+          return;
+        }
+
+        fxList.innerHTML = "";
+
+        currencies.forEach(code => {
+          const rate = data.rates[code];
+          const row = document.createElement("div");
+          row.className = "market-item";
+
+          row.innerHTML = `
+            <div>
+              <div class="asset-name">USD / ${code}</div>
+              <div class="asset-meta">${currencyNames[code]}</div>
+            </div>
+            <div class="price">${rate ? rate.toLocaleString() : "N/A"}</div>
+          `;
+
+          fxList.appendChild(row);
+        });
+
+        fxDate.textContent = "Latest available FX date: " + data.date;
+      } catch (error) {
+        fxList.innerHTML = "<p>Could not load exchange rates right now.</p>";
+        fxDate.textContent = "FX request failed.";
+      }
+    }
+
     loadDebtData();
+    loadExchangeRates();
   </script>
 </body>
 </html>
