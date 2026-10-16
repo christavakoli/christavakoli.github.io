@@ -10,7 +10,7 @@
   <canvas id="matrixCanvas"></canvas>
   <div class="matrix-overlay"></div>
 
-  <header class="site-header hero-header">
+  <header class="home-header">
     <div class="container nav nav-dark">
       <a href="index.html" class="logo-image-link">
         <img src="logowebsite1.png" alt="Logo" class="site-logo-image" />
@@ -24,14 +24,14 @@
         <a href="projects.html">Projects</a>
       </nav>
     </div>
-
-    <div class="container hero-dark">
-      <div class="hero-dark-content">
-        <h1>Welcome</h1>
-        <p>directory above</p>
-      </div>
-    </div>
   </header>
+
+  <main class="home-main">
+    <div class="container hero-center">
+      <h1>Welcome</h1>
+      <p>directory above</p>
+    </div>
+  </main>
 
   <footer class="site-footer footer-dark">
     <div class="container">
@@ -43,25 +43,18 @@
     const canvas = document.getElementById("matrixCanvas");
     const ctx = canvas.getContext("2d");
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = document.documentElement.scrollHeight;
-    }
-
     const letters = "アァイィウヴエカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const chars = letters.split("");
     const fontSize = 16;
+
     let columns = 0;
     let drops = [];
 
-    function resetMatrix() {
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
       columns = Math.floor(canvas.width / fontSize);
       drops = Array(columns).fill(1);
-    }
-
-    function initializeMatrix() {
-      resizeCanvas();
-      resetMatrix();
     }
 
     function drawMatrix() {
@@ -86,10 +79,9 @@
       }
     }
 
-    initializeMatrix();
+    resizeCanvas();
     setInterval(drawMatrix, 50);
-
-    window.addEventListener("resize", initializeMatrix);
+    window.addEventListener("resize", resizeCanvas);
   </script>
 </body>
 </html>
