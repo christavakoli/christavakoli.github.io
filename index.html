@@ -12,7 +12,9 @@
 
     <div class="container nav nav-dark">
       <a href="index.html" class="logo-image-link">
-        <img src="logowebsite1.png" alt="Logo" class="site-logo-image" />
+        <div class="logo-frame">
+          <img src="logowebsite1.png" alt="Logo" class="site-logo-image" />
+        </div>
       </a>
 
       <nav class="nav-links nav-links-dark">
@@ -32,21 +34,9 @@
     </div>
   </header>
 
-  <main class="ocean-section">
-    <div class="ocean-glow"></div>
-
-    <div class="ocean-wave wave1"></div>
-    <div class="ocean-wave wave2"></div>
-    <div class="ocean-wave wave3"></div>
-
-    <div class="container ocean-text-wrap">
-      <div class="ocean-panel">
-        <h2>Signal Horizon</h2>
-        <p>
-          A dark interface for markets, writing, sale listings, and projects.
-        </p>
-      </div>
-    </div>
+  <main class="matrix-section">
+    <canvas id="matrixCanvas"></canvas>
+    <div class="matrix-overlay"></div>
   </main>
 
   <footer class="site-footer footer-dark">
@@ -54,5 +44,58 @@
       <p>© 2026</p>
     </div>
   </footer>
+
+  <script>
+    const canvas = document.getElementById("matrixCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = Math.max(window.innerHeight * 0.42, 260);
+    }
+
+    resizeCanvas();
+
+    const letters = "アァイィウヴエカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const chars = letters.split("");
+
+    const fontSize = 16;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
+
+    function resetDrops() {
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1);
+    }
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(3, 10, 8, 0.08)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#39ff14";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        ctx.fillText(text, x, y);
+
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 50);
+
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      resetDrops();
+    });
+  </script>
 </body>
 </html>
