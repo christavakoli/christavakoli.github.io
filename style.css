@@ -161,9 +161,10 @@ img {
   color: #ffffff;
 }
 
-/* Home Page Canvas */
-.home-dark {
-  overflow-x: hidden;
+/* Home Page Specific Locking */
+.home-locked {
+  height: 100vh;
+  overflow: hidden;
 }
 
 #mazeCanvas {
@@ -189,13 +190,15 @@ img {
   flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
+  height: calc(100vh - 140px);
 }
 
 .hero-center {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 100px 0;
+  align-items: center;
+  text-align: center;
 }
 
 .hero-center h1 {
@@ -212,6 +215,14 @@ img {
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+.home-footer {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 10px 0;
+  border-top: none;
 }
 
 /* Market Page Modern Styling */
@@ -278,7 +289,6 @@ img {
   font-weight: 700;
   font-size: 1.05rem;
   color: #ffffff;
-  font-mono: monospace;
 }
 
 .highlighted-price {
