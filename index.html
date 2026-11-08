@@ -4,24 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home</title>
+  <link rel="icon" type="image/png" href="logowebsite1.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="home-dark">
-  <canvas id="matrixCanvas"></canvas>
-  <div class="matrix-overlay"></div>
+  <canvas id="mazeCanvas"></canvas>
+  <div class="maze-overlay"></div>
 
-  <header class="home-header">
-    <div class="container nav nav-dark">
+  <header class="site-header">
+    <div class="container nav">
       <a href="index.html" class="logo-image-link">
         <img src="logowebsite1.png" alt="Logo" class="site-logo-image" />
       </a>
 
-      <nav class="nav-links nav-links-dark">
+      <nav class="nav-links">
         <a href="index.html" class="active">Home</a>
         <a href="market.html">Market</a>
         <a href="forsale.html">For Sale</a>
         <a href="blog.html">Blog</a>
-        <a href="projects.html">Projects</a>
       </nav>
     </div>
   </header>
@@ -33,59 +33,69 @@
     </div>
   </main>
 
-  <footer class="site-footer footer-dark">
+  <footer class="site-footer">
     <div class="container">
+      <p>Copyright © 2026</p>
     </div>
   </footer>
 
   <script>
-    const canvas = document.getElementById("matrixCanvas");
+    const canvas = document.getElementById("mazeCanvas");
     const ctx = canvas.getContext("2d");
 
-    const letters = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZアァイィウヴエカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
-    const chars = letters.split("");
-    const fontSize = 16;
-
-    let columns = 0;
-    let drops = [];
+    let width, height, offset = 0;
 
     function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      columns = Math.floor(canvas.width / fontSize);
-      drops = Array(columns).fill(1);
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
     }
 
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    function drawMaze() {
+      ctx.fillStyle = "#07090e";
+      ctx.fillRect(0, 0, width, height);
 
-      ctx.fillStyle = "#39ff14";
-      ctx.font = fontSize + "px monospace";
+      const size = 40;
+      const cols = Math.ceil(width / size) + 2;
+      const rows = Math.ceil(height / size) + 2;
 
-      for (let i = 0; i < drops.length; i++) {
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
+      offset += 0.5;
+      if (offset >= size) offset = 0;
 
-        ctx.fillText(text, x, y);
+      ctx.lineWidth = 2;
 
-        if (y > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
+      for (let r = -1; r < rows; r++) {
+        for (let c = -1; c < cols; c++) {
+          const x = c * size - (offset % size);
+          const y = r * size + (offset % size);
+
+          // Optical illusion maze calculation
+          const pattern = Math.sin((c + r) * 0.5) > 0;
+          const hue = (c * 10 + r * 10 + offset * 2) % 360;
+          
+          ctx.strokeStyle = `hsla(${hue}, 40%, 25%, 0.45)`;
+
+          ctx.beginPath();
+          if (pattern) {
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + size, y + size);
+            ctx.moveTo(x + size / 2, y);
+            ctx.lineTo(x + size, y + size / 2);
+          } else {
+            ctx.moveTo(x + size, y);
+            ctx.lineTo(x, y + size);
+            ctx.moveTo(x + size / 2, y + size);
+            ctx.lineTo(x, y + size / 2);
+          }
+          ctx.stroke();
         }
-
-        drops[i]++;
       }
+
+      requestAnimationFrame(drawMaze);
     }
 
-    resizeCanvas();
-    setInterval(drawMatrix, 50);
     window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    drawMaze();
   </script>
-    <footer class="site-footer">
-    <div class="container">
-    <p>Copyright © 2026</p>
-    </div>
-    </footer>
 </body>
 </html>
