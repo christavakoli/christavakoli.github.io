@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="logowebsite1.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="home-dark">
+<body class="home-locked">
   <canvas id="mazeCanvas"></canvas>
   <div class="maze-overlay"></div>
 
@@ -33,7 +33,7 @@
     </div>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer home-footer">
     <div class="container">
       <p>Copyright © 2026</p>
     </div>
@@ -68,7 +68,6 @@
           const x = c * size - (offset % size);
           const y = r * size + (offset % size);
 
-          // Optical illusion maze calculation
           const pattern = Math.sin((c + r) * 0.5) > 0;
           const hue = (c * 10 + r * 10 + offset * 2) % 360;
           
