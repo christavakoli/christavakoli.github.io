@@ -4,57 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Market</title>
+  <link rel="icon" type="image/png" href="logowebsite1.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="container nav">
-      <a href="index.html" class="logo"></a>
+      <a href="index.html" class="logo-image-link">
+        <img src="logowebsite1.png" alt="Logo" class="site-logo-image" />
+      </a>
       <nav class="nav-links">
         <a href="index.html">Home</a>
         <a href="market.html" class="active">Market</a>
         <a href="forsale.html">For Sale</a>
         <a href="blog.html">Blog</a>
-        <a href="projects.html">Projects</a>
       </nav>
     </div>
   </header>
 
   <main class="section">
     <div class="container">
-      <h1 class="section-title">Market</h1>
+      <h1 class="section-title">Market Overview</h1>
       <p class="section-subtitle">
-        U.S. debt, broader market views, and CAD-centered exchange rates.
+        Real-time financial benchmarks, commodity tracking, foreign exchange rates, and public debt indices.
       </p>
 
       <div class="market-stack">
-        <div class="card card-tight">
-          <h3>U.S. National Debt</h3>
-          <p class="section-subtitle">Official Treasury daily data</p>
-
-          <div class="market-item">
-            <div>
-              <div class="asset-name">Total Public Debt Outstanding</div>
-              <div class="asset-meta">Source: U.S. Treasury Fiscal Data</div>
-            </div>
-            <div class="price" id="us-debt-value">Loading...</div>
-          </div>
-
-          <p class="meta" id="us-debt-date">Fetching latest available date...</p>
-        </div>
-
+        <!-- Prioritized Charts First -->
         <div class="card widget-card">
-          <h3>Markets Overview</h3>
-          <p class="section-subtitle">Live TradingView market widget</p>
+          <div class="card-header">
+            <h3>Global Markets & Asset Trends</h3>
+            <span class="badge">Live Stream</span>
+          </div>
 
           <div class="widget-frame">
             <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-market-overview.js"></script>
-
             <tv-market-overview
-              color-theme="light"
+              color-theme="dark"
               locale="en"
               width="100%"
-              height="520"
+              height="550"
               date-range="12M"
               show-chart="true"
               is-transparent="true"
@@ -69,7 +58,7 @@
                   ]
                 },
                 {
-                  "sectionName":"Metals",
+                  "sectionName":"Metals & Energy",
                   "symbols":[
                     "TVC:GOLD",
                     "TVC:SILVER",
@@ -102,21 +91,39 @@
           </div>
         </div>
 
-        <div class="card card-tight">
-          <h3>CAD Exchange Rates</h3>
-          <p class="section-subtitle">
-            CAD compared with USD, Chinese yuan, Australian dollar, euro, British pound, and Iranian rial.
-          </p>
+        <!-- Secondary Metrics Grid -->
+        <div class="grid grid-2">
+          <div class="card card-tight">
+            <h3>U.S. National Debt</h3>
+            <p class="section-subtitle">Official Treasury Daily Feed</p>
 
-          <div id="fx-rates-list">
             <div class="market-item">
               <div>
-                <div class="asset-name">Loading exchange rates...</div>
+                <div class="asset-name">Total Public Debt Outstanding</div>
+                <div class="asset-meta">Source: U.S. Treasury Fiscal Data</div>
               </div>
+              <div class="price highlighted-price" id="us-debt-value">Loading...</div>
             </div>
+
+            <p class="meta" id="us-debt-date">Fetching latest available date...</p>
           </div>
 
-          <p class="meta" id="fx-date">Fetching latest available FX date...</p>
+          <div class="card card-tight">
+            <h3>CAD Exchange Rates</h3>
+            <p class="section-subtitle">
+              CAD base comparison values
+            </p>
+
+            <div id="fx-rates-list">
+              <div class="market-item">
+                <div>
+                  <div class="asset-name">Loading exchange rates...</div>
+                </div>
+              </div>
+            </div>
+
+            <p class="meta" id="fx-date">Fetching latest FX date...</p>
+          </div>
         </div>
       </div>
     </div>
@@ -124,6 +131,7 @@
 
   <footer class="site-footer">
     <div class="container">
+      <p>Copyright © 2026</p>
     </div>
   </footer>
 
@@ -146,23 +154,21 @@
           });
 
           debtValue.textContent = formatted;
-          debtDate.textContent = "Latest available Treasury date: " + latest.record_date;
+          debtDate.textContent = "Treasury date: " + latest.record_date;
         } else {
           debtValue.textContent = "Unavailable";
           debtDate.textContent = "No debt data returned.";
         }
       } catch (error) {
         debtValue.textContent = "Unavailable";
-        debtDate.textContent = "Could not load Treasury data right now.";
+        debtDate.textContent = "Could not load Treasury data.";
       }
     }
 
     async function loadCadRates() {
       const fxList = document.getElementById("fx-rates-list");
       const fxDate = document.getElementById("fx-date");
-
       const targets = ["USD", "CNY", "AUD", "EUR", "GBP", "IRR"];
-
       const names = {
         USD: "U.S. Dollar",
         CNY: "Chinese Yuan",
@@ -188,7 +194,6 @@
 
         targets.forEach(code => {
           const rate = data.rates[code];
-
           const row = document.createElement("div");
           row.className = "market-item";
 
@@ -204,8 +209,8 @@
         });
 
         fxDate.textContent = data.date
-          ? "Latest available FX date: " + data.date
-          : "Latest available FX date unavailable.";
+          ? "FX Date: " + data.date
+          : "FX date unavailable.";
       } catch (error) {
         fxList.innerHTML = "<p>Could not load exchange rates right now.</p>";
         fxDate.textContent = "FX request failed.";
@@ -215,10 +220,5 @@
     loadDebtData();
     loadCadRates();
   </script>
-    <footer class="site-footer">
-    <div class="container">
-    <p>Copyright © 2026</p>
-    </div>
-    </footer>
 </body>
 </html>
