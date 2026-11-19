@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Merge, Split & Reorder PDF Pages Privately | Christa Vakoli</title>
+  <meta name="description" content="Merge PDFs, choose page order, extract ranges and turn images into PDFs without uploading files.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://christavakoli.com/tools/merge-pdf.html">
+  <meta property="og:title" content="Private PDF Merge & Split Tool">
+  <meta property="og:description" content="Organize PDF pages locally in your browser.">
+  <link rel="canonical" href="https://christavakoli.com/tools/merge-pdf.html">
+  <link rel="stylesheet" href="../css/tools.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Private PDF Tools",
+      "url": "https://christavakoli.com/tools/merge-pdf.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any modern browser",
+      "description": "Merge, reorder and extract PDF pages; create PDFs from images locally."
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" defer></script>
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/pdf-tools.js" defer></script>
+</head>
+<body class="utility-site" data-home="./">
+  <div id="tools-header"></div>
+
+  <main class="wrap main-content">
+    <h1>PDF tools</h1>
+    <p class="page-intro">Merge documents, arrange pages, extract a range, or create a PDF from images.</p>
+
+    <!-- AD_SLOT_TOP: Paste an optional ad snippet inside this empty container. -->
+    <div class="ad-slot" aria-label="Advertisement"></div>
+
+    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+
+    <div class="tool-layout">
+      <div class="stack">
+        <section class="panel" aria-labelledby="pdf-heading">
+          <h2 id="pdf-heading">Merge or extract PDF pages</h2>
+
+          <div class="dropzone" id="pdf-drop">
+            <label for="pdf-files">Choose PDFs, or drop them here</label>
+            <input id="pdf-files" type="file" accept=".pdf,application/pdf" multiple>
+          </div>
+
+          <p class="hint">
+            Use the arrows to rearrange files. For each file, optionally enter
+            pages in output order, such as 3,1,5-7. Leave blank for all pages.
+          </p>
+
+          <ul id="pdf-list" class="item-list" aria-label="Selected PDF documents"></ul>
+
+          <div class="actions">
+            <button id="build-pdf" type="button" class="btn primary">
+              Download selected pages
+            </button>
+            <button id="clear-pdfs" type="button" class="btn">
+              Clear PDFs
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="images-heading">
+          <h2 id="images-heading">Images to PDF</h2>
+
+          <div class="dropzone" id="pdf-image-drop">
+            <label for="pdf-images">Choose PNG, JPG or WebP images, or drop them here</label>
+            <input id="pdf-images" type="file"
+                   accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                   multiple>
+          </div>
+
+          <p class="hint">
+            Each image becomes one page, in the order shown. WebP images are
+            converted to PNG locally before being added.
+          </p>
+
+          <ul id="pdf-image-list" class="item-list" aria-label="Selected images"></ul>
+
+          <div class="actions">
+            <button id="build-image-pdf" type="button" class="btn primary">
+              Download images as PDF
+            </button>
+            <button id="clear-pdf-images" type="button" class="btn">
+              Clear images
+            </button>
+          </div>
+        </section>
+
+        <p class="privacy-notice">
+          Privacy: Your files are processed locally on your device and are never uploaded.
+        </p>
+      </div>
+
+      <aside>
+        <!-- AD_SLOT_SIDEBAR: Paste an optional ad snippet inside this empty container. -->
+        <div class="ad-slot" aria-label="Advertisement"></div>
+      </aside>
+    </div>
+
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">How it works & FAQ</h2>
+
+      <div class="panel">
+        <h3>How do I merge PDFs in a particular order?</h3>
+        <p>Add your PDFs, move files with the arrows, and optionally specify a page order for each file. The downloaded document follows that order.</p>
+      </div>
+
+      <div class="panel">
+        <h3>How do I split or extract pages?</h3>
+        <p>Add a single PDF, enter the pages you want—such as <code>2-4,8</code>—and download the result. Enter <code>5-3</code> to reverse a range.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Can I open password-protected PDFs?</h3>
+        <p>No. If you are authorized to use an encrypted document, unlock it with a PDF application first.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="tools-footer"></div>
+</body>
+</html>
