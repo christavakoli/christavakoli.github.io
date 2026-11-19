@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>JSON to CSV & CSV to JSON Converter | Christa Vakoli</title>
+  <meta name="description" content="Convert JSON and CSV both ways, validate and format JSON, and preview data in a table. Everything runs locally in your browser.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://christavakoli.com/tools/json-csv.html">
+  <meta property="og:title" content="Private JSON & CSV Converter">
+  <meta property="og:description" content="Convert and preview structured data without uploading it.">
+  <link rel="canonical" href="https://christavakoli.com/tools/json-csv.html">
+  <link rel="stylesheet" href="../css/tools.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "JSON and CSV Converter",
+      "url": "https://christavakoli.com/tools/json-csv.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any modern browser",
+      "description": "Convert JSON and CSV, format JSON, and preview tables locally."
+    }
+  </script>
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/data-tools.js" defer></script>
+</head>
+<body class="utility-site" data-home="./">
+  <div id="tools-header"></div>
+
+  <main class="wrap main-content">
+    <h1>JSON & CSV converter</h1>
+    <p class="page-intro">Convert, validate, format, and preview your data.</p>
+
+    <!-- AD_SLOT_TOP: Paste an optional ad snippet inside this empty container. -->
+    <div class="ad-slot" aria-label="Advertisement"></div>
+
+    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+
+    <div class="tool-layout">
+      <div class="stack">
+        <section class="panel" aria-labelledby="converter-heading">
+          <h2 id="converter-heading">Convert data</h2>
+
+          <label for="conversion-direction">Conversion direction</label>
+          <select id="conversion-direction">
+            <option value="json-to-csv">JSON → CSV</option>
+            <option value="csv-to-json">CSV → JSON</option>
+          </select>
+
+          <label for="data-input">Input</label>
+          <textarea id="data-input" spellcheck="false"
+                    placeholder='[{"name":"Ada","age":36}]'></textarea>
+
+          <div class="actions">
+            <button id="convert-data" type="button" class="btn primary">
+              Convert
+            </button>
+            <button id="format-json" type="button" class="btn">
+              Format / validate JSON input
+            </button>
+          </div>
+
+          <label for="data-output">Output</label>
+          <textarea id="data-output" spellcheck="false" readonly
+                    aria-label="Converted output"></textarea>
+
+          <div class="actions">
+            <button id="copy-output" type="button" class="btn">
+              Copy output
+            </button>
+            <button id="download-output" type="button" class="btn">
+              Download output
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="preview-heading">
+          <h2 id="preview-heading">Table preview</h2>
+          <p id="preview-status" class="hint">Convert data to see a preview.</p>
+          <div id="table-preview" class="table-scroll"></div>
+        </section>
+
+        <p class="privacy-notice">
+          Privacy: Your data is processed locally on your device and is never uploaded.
+        </p>
+      </div>
+
+      <aside>
+        <!-- AD_SLOT_SIDEBAR: Paste an optional ad snippet inside this empty container. -->
+        <div class="ad-slot" aria-label="Advertisement"></div>
+      </aside>
+    </div>
+
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">How it works & FAQ</h2>
+
+      <div class="panel">
+        <h3>What JSON can I convert to CSV?</h3>
+        <p>Enter a nonempty array of objects, such as <code>[{"name":"Ada"}]</code>. The tool gathers columns from all objects. Nested arrays and objects become JSON text inside CSV cells.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Does CSV support commas and line breaks?</h3>
+        <p>Yes. Quoted fields can contain commas, line breaks, and escaped double quotes. The first CSV row supplies the column names.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Are numbers automatically detected in CSV?</h3>
+        <p>No. CSV cells become JSON strings, which preserves values such as ZIP codes with leading zeroes.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="tools-footer"></div>
+</body>
+</html>
