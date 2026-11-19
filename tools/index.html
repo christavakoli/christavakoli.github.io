@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Private Browser Tools | PDFs, Images, Data, Text & QR Codes</title>
+  <meta name="description" content="Free browser-based PDF, image, JSON, CSV, text and QR tools. Your files stay on your device.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://christavakoli.com/tools/">
+  <meta property="og:title" content="Private Browser Tools | Christa Vakoli">
+  <meta property="og:description" content="Practical utilities that process your files locally in your browser.">
+  <link rel="canonical" href="https://christavakoli.com/tools/">
+  <link rel="stylesheet" href="../css/tools.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Private Browser Tools",
+      "url": "https://christavakoli.com/tools/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any modern browser",
+      "description": "Browser-based PDF, image, data, text and QR code utilities."
+    }
+  </script>
+  <script src="../js/shared.js" defer></script>
+</head>
+<body class="utility-site" data-home="./">
+  <div id="tools-header"></div>
+
+  <main class="wrap main-content">
+    <section class="hero">
+      <span class="trust-badge">100% Private — Files Never Leave Your Browser</span>
+      <h1>Useful tools. Your files stay yours.</h1>
+      <p>Organize PDFs, convert images, transform data, work with text, and generate QR codes—directly on your device.</p>
+
+      <label for="tool-search">Find a tool</label>
+      <input id="tool-search" type="search" autocomplete="off"
+             placeholder="Search PDF, images, CSV, text, QR…">
+    </section>
+
+    <!-- AD_SLOT_TOP: Paste an optional ad snippet inside this empty container. -->
+    <div class="ad-slot" aria-label="Advertisement"></div>
+
+    <section aria-labelledby="browse-heading">
+      <h2 id="browse-heading">Explore tools</h2>
+      <div class="tool-grid" id="tool-grid">
+        <a class="tool-card panel" href="./merge-pdf.html"
+           data-search="pdf merge split extract reorder pages images">
+          <span class="card-icon" aria-hidden="true">▤</span>
+          <h3>PDF tools</h3>
+          <p>Merge files, rearrange pages, extract ranges, and make PDFs from images.</p>
+        </a>
+
+        <a class="tool-card panel" href="./image-converter.html"
+           data-search="image convert png jpg jpeg webp avif resize compress exif zip">
+          <span class="card-icon" aria-hidden="true">▧</span>
+          <h3>Image converter</h3>
+          <p>Convert, resize, compress, and download images individually or as a ZIP.</p>
+        </a>
+
+        <a class="tool-card panel" href="./json-csv.html"
+           data-search="json csv convert validate format preview table">
+          <span class="card-icon" aria-hidden="true">{ }</span>
+          <h3>JSON & CSV</h3>
+          <p>Convert data both ways, format JSON, and preview tables.</p>
+        </a>
+
+        <a class="tool-card panel" href="./text-tools.html"
+           data-search="text words characters reading time whitespace case diff compare">
+          <span class="card-icon" aria-hidden="true">Aa</span>
+          <h3>Text tools</h3>
+          <p>Count, clean, transform, and compare text.</p>
+        </a>
+
+        <a class="tool-card panel" href="./qr-generator.html"
+           data-search="qr code link url wifi wi-fi png svg">
+          <span class="card-icon" aria-hidden="true">▦</span>
+          <h3>QR generator</h3>
+          <p>Create custom QR codes for links, text, and Wi-Fi.</p>
+        </a>
+      </div>
+      <p id="no-results" class="subtle" hidden>No tools match your search.</p>
+    </section>
+  </main>
+
+  <div id="tools-footer"></div>
+
+  <script>
+    document.getElementById("tool-search").addEventListener("input", function () {
+      const query = this.value.trim().toLowerCase();
+      let matches = 0;
+
+      document.querySelectorAll(".tool-card").forEach(function (card) {
+        const searchable = (card.textContent + " " + card.dataset.search).toLowerCase();
+        card.hidden = !searchable.includes(query);
+        if (!card.hidden) matches++;
+      });
+
+      document.getElementById("no-results").hidden = matches !== 0;
+    });
+  </script>
+</body>
+</html>
