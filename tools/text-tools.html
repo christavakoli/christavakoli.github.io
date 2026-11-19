@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Word Counter, Text Cleaner, Case Converter & Diff | Christa Vakoli</title>
+  <meta name="description" content="Count words and characters, estimate reading time, clean whitespace, change case and compare text side by side.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://christavakoli.com/tools/text-tools.html">
+  <meta property="og:title" content="Private Text Tools">
+  <meta property="og:description" content="Count, clean, transform and compare text locally.">
+  <link rel="canonical" href="https://christavakoli.com/tools/text-tools.html">
+  <link rel="stylesheet" href="../css/tools.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Private Text Tools",
+      "url": "https://christavakoli.com/tools/text-tools.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any modern browser",
+      "description": "Word counting, whitespace cleanup, case conversion and line comparison."
+    }
+  </script>
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/text-tools.js" defer></script>
+</head>
+<body class="utility-site" data-home="./">
+  <div id="tools-header"></div>
+
+  <main class="wrap main-content">
+    <h1>Text tools</h1>
+    <p class="page-intro">Count, clean, transform and compare text.</p>
+
+    <!-- AD_SLOT_TOP: Paste an optional ad snippet inside this empty container. -->
+    <div class="ad-slot" aria-label="Advertisement"></div>
+
+    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+
+    <div class="tool-layout">
+      <div class="stack">
+        <section class="panel" aria-labelledby="editing-heading">
+          <h2 id="editing-heading">Edit and count</h2>
+
+          <label for="text-input">Your text</label>
+          <textarea id="text-input"
+                    placeholder="Type or paste text here"></textarea>
+
+          <div class="stats" aria-live="polite">
+            <span>Words: <strong id="word-count">0</strong></span>
+            <span>Characters: <strong id="character-count">0</strong></span>
+            <span>Reading time: <strong id="reading-time">0 sec</strong></span>
+          </div>
+
+          <div class="cols-2">
+            <div>
+              <label for="cleanup-mode">Whitespace cleanup</label>
+              <select id="cleanup-mode">
+                <option value="trim-lines">
+                  Trim lines and remove extra blank lines
+                </option>
+                <option value="collapse-spaces">
+                  Collapse spaces; keep line breaks
+                </option>
+                <option value="single-line">
+                  Make one line
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label for="case-mode">Letter case</label>
+              <select id="case-mode">
+                <option value="upper">UPPERCASE</option>
+                <option value="lower">lowercase</option>
+                <option value="title">Title Case</option>
+                <option value="sentence">Sentence case</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="clean-text" type="button" class="btn">
+              Clean whitespace
+            </button>
+            <button id="change-case" type="button" class="btn">
+              Change case
+            </button>
+            <button id="copy-text" type="button" class="btn">
+              Copy text
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="compare-heading">
+          <h2 id="compare-heading">Compare text</h2>
+
+          <div class="cols-2">
+            <div>
+              <label for="original-text">Original</label>
+              <textarea id="original-text"></textarea>
+            </div>
+
+            <div>
+              <label for="revised-text">Revised</label>
+              <textarea id="revised-text"></textarea>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="compare-text" type="button" class="btn primary">
+              Compare lines
+            </button>
+          </div>
+
+          <p class="hint">
+            Removed lines appear red; added lines appear green.
+            Maximum: 750 lines per side.
+          </p>
+
+          <div class="cols-2">
+            <div>
+              <h3>Original</h3>
+              <div id="original-result" class="diff-output"
+                   aria-label="Highlighted original text"></div>
+            </div>
+
+            <div>
+              <h3>Revised</h3>
+              <div id="revised-result" class="diff-output"
+                   aria-label="Highlighted revised text"></div>
+            </div>
+          </div>
+        </section>
+
+        <p class="privacy-notice">
+          Privacy: Your text is processed locally on your device and is never uploaded.
+        </p>
+      </div>
+
+      <aside>
+        <!-- AD_SLOT_SIDEBAR: Paste an optional ad snippet inside this empty container. -->
+        <div class="ad-slot" aria-label="Advertisement"></div>
+      </aside>
+    </div>
+
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">How it works & FAQ</h2>
+
+      <div class="panel">
+        <h3>How is reading time estimated?</h3>
+        <p>The estimate uses 200 words per minute. Your actual reading speed may differ.</p>
+      </div>
+
+      <div class="panel">
+        <h3>What does the comparison highlight?</h3>
+        <p>It compares complete lines in order, highlighting lines removed from the original and lines added to the revision.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Will cleaning change my text?</h3>
+        <p>Yes. Cleanup and case conversion replace the contents of the editor. Copy your original text first if you need to keep it.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="tools-footer"></div>
+</body>
+</html>
