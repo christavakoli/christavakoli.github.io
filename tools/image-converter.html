@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Private Image Converter, Resizer & Compressor | Christa Vakoli</title>
+  <meta name="description" content="Convert PNG, JPG, WebP and supported AVIF images. Resize and compress locally, then download one image or a batch ZIP.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://christavakoli.com/tools/image-converter.html">
+  <meta property="og:title" content="Private Image Converter">
+  <meta property="og:description" content="Convert and resize images without uploading them.">
+  <link rel="canonical" href="https://christavakoli.com/tools/image-converter.html">
+  <link rel="stylesheet" href="../css/tools.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Private Image Converter",
+      "url": "https://christavakoli.com/tools/image-converter.html",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any modern browser",
+      "description": "Browser-based image conversion, resizing and compression."
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/image-tools.js" defer></script>
+</head>
+<body class="utility-site" data-home="./">
+  <div id="tools-header"></div>
+
+  <main class="wrap main-content">
+    <h1>Image converter</h1>
+    <p class="page-intro">Convert formats, resize an entire batch, and adjust output quality.</p>
+
+    <!-- AD_SLOT_TOP: Paste an optional ad snippet inside this empty container. -->
+    <div class="ad-slot" aria-label="Advertisement"></div>
+
+    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+
+    <div class="tool-layout">
+      <div class="stack">
+        <section class="panel" aria-labelledby="converter-heading">
+          <h2 id="converter-heading">Convert images</h2>
+
+          <div class="dropzone" id="image-drop">
+            <label for="image-files">Choose images, or drop them here</label>
+            <input id="image-files" type="file"
+                   accept=".png,.jpg,.jpeg,.webp,.avif,image/png,image/jpeg,image/webp,image/avif"
+                   multiple>
+          </div>
+
+          <ul id="image-list" class="item-list" aria-label="Selected images"></ul>
+
+          <div class="cols-2">
+            <div>
+              <label for="output-format">Output format</label>
+              <select id="output-format">
+                <option value="image/png">PNG</option>
+                <option value="image/jpeg">JPG</option>
+                <option value="image/webp">WebP</option>
+                <option value="image/avif">AVIF</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="resize-mode">Resize mode</label>
+              <select id="resize-mode">
+                <option value="none">Keep original dimensions</option>
+                <option value="pixels">Exact pixel dimensions</option>
+                <option value="percent">Percentage</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="cols-2" id="pixel-controls" hidden>
+            <div>
+              <label for="target-width">Width in pixels</label>
+              <input id="target-width" type="number" min="1" max="16384"
+                     placeholder="e.g. 1200">
+            </div>
+            <div>
+              <label for="target-height">Height in pixels</label>
+              <input id="target-height" type="number" min="1" max="16384"
+                     placeholder="e.g. 800">
+            </div>
+          </div>
+
+          <div id="percent-controls" hidden>
+            <label for="target-percent">Size percentage</label>
+            <input id="target-percent" type="number" min="1" max="1000" value="50">
+          </div>
+
+          <label for="image-quality">
+            Quality: <output id="quality-display">85</output>%
+          </label>
+          <input id="image-quality" type="range" min="1" max="100" value="85">
+
+          <p class="hint">
+            Quality affects JPG, WebP and AVIF if your browser supports the
+            selected encoder. Exact dimensions can change the aspect ratio.
+            Re-encoding through Canvas does not copy the source image's EXIF metadata.
+          </p>
+
+          <div class="actions">
+            <button id="convert-images" type="button" class="btn primary">
+              Convert & download
+            </button>
+            <button id="clear-images" type="button" class="btn">
+              Clear images
+            </button>
+          </div>
+        </section>
+
+        <p class="privacy-notice">
+          Privacy: Your images are processed locally on your device and are never uploaded.
+        </p>
+      </div>
+
+      <aside>
+        <!-- AD_SLOT_SIDEBAR: Paste an optional ad snippet inside this empty container. -->
+        <div class="ad-slot" aria-label="Advertisement"></div>
+      </aside>
+    </div>
+
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">How it works & FAQ</h2>
+
+      <div class="panel">
+        <h3>How do I convert multiple images?</h3>
+        <p>Select several files and an output format. One result downloads directly; multiple results download together in a ZIP.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Can I export AVIF?</h3>
+        <p>Only if your browser supports AVIF encoding through Canvas. If it does not, the tool displays an error rather than silently saving another format.</p>
+      </div>
+
+      <div class="panel">
+        <h3>What happens to EXIF information?</h3>
+        <p>The image is decoded and re-encoded using Canvas. Source EXIF metadata is not copied to the output. Keep the original if you need its metadata.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="tools-footer"></div>
+</body>
+</html>
