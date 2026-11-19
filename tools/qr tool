@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Private QR Code Generator for Links, Text & Wi-Fi | Christa Vakoli</title>
+  <meta name="description" content="Create colored QR codes for URLs, text and Wi-Fi credentials. Download PNG or vector SVG directly from your browser.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://christavakoli.com/tools/qr-generator.html">
+  <meta property="og:title" content="Private QR Code Generator">
+  <meta property="og:description" content="Generate custom PNG and SVG QR codes locally.">
+  <link rel="canonical" href="https://christavakoli.com/tools/qr-generator.html">
+  <link rel="stylesheet" href="../css/tools.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Private QR Code Generator",
+      "url": "https://christavakoli.com/tools/qr-generator.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any modern browser",
+      "description": "Create QR codes for URLs, text and Wi-Fi with PNG and SVG downloads."
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/qr-tools.js" defer></script>
+</head>
+<body class="utility-site" data-home="./">
+  <div id="tools-header"></div>
+
+  <main class="wrap main-content">
+    <h1>QR code generator</h1>
+    <p class="page-intro">Make custom QR codes for links, plain text and Wi-Fi.</p>
+
+    <!-- AD_SLOT_TOP: Paste an optional ad snippet inside this empty container. -->
+    <div class="ad-slot" aria-label="Advertisement"></div>
+
+    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+
+    <div class="tool-layout">
+      <div class="stack">
+        <section class="panel" aria-labelledby="generator-heading">
+          <h2 id="generator-heading">Create a QR code</h2>
+
+          <label for="qr-kind">QR content</label>
+          <select id="qr-kind">
+            <option value="url">Website URL</option>
+            <option value="text">Plain text</option>
+            <option value="wifi">Wi-Fi credentials</option>
+          </select>
+
+          <div id="url-controls">
+            <label for="qr-url">Website URL</label>
+            <input id="qr-url" type="url"
+                   placeholder="https://example.com"
+                   autocomplete="url">
+          </div>
+
+          <div id="text-controls" hidden>
+            <label for="qr-text">Plain text</label>
+            <textarea id="qr-text"
+                      placeholder="Type the text to encode"></textarea>
+          </div>
+
+          <div id="wifi-controls" hidden>
+            <label for="wifi-ssid">Network name (SSID)</label>
+            <input id="wifi-ssid" type="text"
+                   autocomplete="off">
+
+            <label for="wifi-security">Security</label>
+            <select id="wifi-security">
+              <option value="WPA">WPA / WPA2 / WPA3 Personal</option>
+              <option value="WEP">WEP</option>
+              <option value="nopass">Open network</option>
+            </select>
+
+            <div id="wifi-password-controls">
+              <label for="wifi-password">Wi-Fi password</label>
+              <input id="wifi-password" type="text"
+                     autocomplete="off">
+            </div>
+
+            <label>
+              <input id="wifi-hidden" type="checkbox">
+              Hidden network
+            </label>
+          </div>
+
+          <div class="cols-2">
+            <div>
+              <label for="qr-foreground">Foreground</label>
+              <input id="qr-foreground" type="color" value="#111827">
+            </div>
+
+            <div>
+              <label for="qr-background">Background</label>
+              <input id="qr-background" type="color" value="#ffffff">
+            </div>
+          </div>
+
+          <p class="hint">
+            Use contrasting colors for reliable scanning. Wi-Fi passwords
+            are encoded in the QR code itself; share the image only with
+            people you want to give access to.
+          </p>
+
+          <div class="actions">
+            <button id="generate-qr" type="button" class="btn primary">
+              Generate QR code
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="preview-heading">
+          <h2 id="preview-heading">Preview and download</h2>
+
+          <div id="qr-preview" class="qr-preview"
+               aria-label="Generated QR code preview">
+            <p class="hint">Your QR code will appear here.</p>
+          </div>
+
+          <div class="actions">
+            <button id="download-qr-png" type="button" class="btn"
+                    disabled>Download PNG</button>
+            <button id="download-qr-svg" type="button" class="btn"
+                    disabled>Download SVG</button>
+          </div>
+        </section>
+
+        <p class="privacy-notice">
+          Privacy: QR content is processed locally on your device and is never uploaded.
+          Anyone who receives a generated QR image can read its encoded content.
+        </p>
+      </div>
+
+      <aside>
+        <!-- AD_SLOT_SIDEBAR: Paste an optional ad snippet inside this empty container. -->
+        <div class="ad-slot" aria-label="Advertisement"></div>
+      </aside>
+    </div>
+
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">How it works & FAQ</h2>
+
+      <div class="panel">
+        <h3>How do I create a Wi-Fi QR code?</h3>
+        <p>Select Wi-Fi, enter the network name and security details, then generate the code. Scan it with a compatible device to join the network.</p>
+      </div>
+
+      <div class="panel">
+        <h3>What is the difference between PNG and SVG?</h3>
+        <p>PNG is a pixel image. SVG is vector artwork and can be enlarged without becoming blurry.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Is it safe to share a Wi-Fi QR code?</h3>
+        <p>Only share it with people you trust. A Wi-Fi QR code contains the network details, including its password when you enter one.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="tools-footer"></div>
+</body>
+</html>
