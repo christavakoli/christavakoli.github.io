@@ -318,9 +318,7 @@
       "viewBox",
       `0 0 ${totalWidth} 48`
     );
-    svg.setAttribute(
-      "preserveAspectRatio",
-      "xMidYMid meet"
+    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
     );
   }
 
