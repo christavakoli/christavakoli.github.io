@@ -6,13 +6,18 @@
   <meta name="color-scheme" content="dark light">
 
   <title>Editable Store-Style Receipt Maker | Christa Vakoli</title>
-  <meta name="description" content="Create an editable thermal-paper-style store receipt with items, tax, payment details and a barcode. Print or save as PDF locally.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://christavakoli.com/tools/receipt-maker.html">
-  <meta property="og:title" content="Editable Store-Style Receipt Maker">
-  <meta property="og:description" content="Create and print your own store-style receipts locally.">
-  <link rel="canonical" href="https://christavakoli.com/tools/receipt-maker.html">
+  <meta name="description"
+        content="Create an editable store-style receipt with items, tax, payment details, an optional barcode and a thermal-paper preview. Print or save as PDF in your browser.">
 
+  <meta property="og:type" content="website">
+  <meta property="og:url"
+        content="https://christavakoli.com/tools/receipt-maker.html">
+  <meta property="og:title" content="Editable Store-Style Receipt Maker">
+  <meta property="og:description"
+        content="Create and print customizable store-style receipts locally in your browser.">
+
+  <link rel="canonical"
+        href="https://christavakoli.com/tools/receipt-maker.html">
   <link rel="stylesheet" href="../css/tools.css">
 
   <script type="application/ld+json">
@@ -23,70 +28,335 @@
       "url": "https://christavakoli.com/tools/receipt-maker.html",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Any modern browser",
-      "description": "Create editable thermal-paper-style receipts locally in a browser."
+      "description": "Create, preview and print customizable store-style receipts locally in the browser."
     }
   </script>
 
+  <style>
+    /*
+     * Receipt-specific styles are contained in this file.
+     * They do not modify your existing site or other tools.
+     */
+
+    .utility-site .receipt-builder {
+      display: grid;
+      grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+      align-items: start;
+      gap: 24px;
+    }
+
+    .utility-site .receipt-editor {
+      display: grid;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .utility-site .receipt-preview-column {
+      min-width: 0;
+    }
+
+    .utility-site .receipt-preview-column > h2 {
+      margin-top: 0;
+    }
+
+    .utility-site .receipt-editor textarea {
+      min-height: 85px;
+    }
+
+    .utility-site .receipt-form-item {
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .utility-site .receipt-form-item:last-child {
+      border-bottom: 0;
+    }
+
+    .utility-site .receipt-form-item > strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .utility-site .receipt-form-item .btn {
+      margin-top: 12px;
+    }
+
+    .utility-site .receipt-paper {
+      width: min(100%, 80mm);
+      margin: 0 auto;
+      padding: 8mm 4mm 10mm;
+      background: #ffffff;
+      color: #111111;
+      box-shadow: var(--shadow);
+      font: 12px/1.38 "Courier New", Courier, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .utility-site .receipt-paper [hidden] {
+      display: none !important;
+    }
+
+    .utility-site .receipt-paper p {
+      margin: 0;
+    }
+
+    .utility-site .receipt-paper .receipt-center {
+      text-align: center;
+    }
+
+    .utility-site .receipt-paper .receipt-logo {
+      display: block;
+      max-width: 56mm;
+      max-height: 25mm;
+      object-fit: contain;
+      margin: 0 auto 6px;
+    }
+
+    .utility-site .receipt-paper .receipt-store-name {
+      margin: 4px 0 7px;
+      color: #111111;
+      font: 800 22px/1.1 Arial, Helvetica, sans-serif;
+      overflow-wrap: anywhere;
+    }
+
+    .utility-site .receipt-paper .receipt-lines {
+      white-space: pre-line;
+    }
+
+    .utility-site .receipt-paper .receipt-intro {
+      margin: 24px 0 12px;
+    }
+
+    .utility-site .receipt-paper .receipt-divider {
+      margin: 15px 0;
+      padding: 7px 0;
+      border-top: 1px dashed #444444;
+      border-bottom: 1px dashed #444444;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .utility-site .receipt-paper .receipt-divider::before,
+    .utility-site .receipt-paper .receipt-divider::after {
+      content: "********************************";
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      letter-spacing: 1px;
+    }
+
+    .utility-site .receipt-paper .receipt-meta {
+      margin: 16px 0 19px;
+    }
+
+    .utility-site .receipt-paper .receipt-pair {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .utility-site .receipt-paper .receipt-pair > :last-child {
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .utility-site .receipt-paper .receipt-item {
+      margin-bottom: 12px;
+      break-inside: avoid;
+    }
+
+    .utility-site .receipt-paper .receipt-item-main {
+      display: flex;
+      justify-content: space-between;
+      gap: 7px;
+    }
+
+    .utility-site .receipt-paper .receipt-item-main > :first-child {
+      min-width: 0;
+    }
+
+    .utility-site .receipt-paper .receipt-item-main > :last-child {
+      flex: none;
+    }
+
+    .utility-site .receipt-paper .receipt-item-detail {
+      font-size: 11px;
+    }
+
+    .utility-site .receipt-paper .receipt-totals {
+      margin-top: 18px;
+    }
+
+    .utility-site .receipt-paper .receipt-totals .receipt-pair {
+      margin: 4px 0;
+    }
+
+    .utility-site .receipt-paper .receipt-grand-total {
+      margin-top: 8px !important;
+      padding: 8px 0;
+      border-top: 1px solid #555555;
+      border-bottom: 1px dashed #555555;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .utility-site .receipt-paper .receipt-payment {
+      margin: 13px 0;
+      padding-bottom: 11px;
+      border-bottom: 1px dashed #555555;
+    }
+
+    .utility-site .receipt-paper .receipt-footer {
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .utility-site .receipt-paper .receipt-footer-message {
+      margin-bottom: 23px;
+    }
+
+    .utility-site .receipt-paper .receipt-barcode {
+      margin-top: 25px;
+    }
+
+    .utility-site .receipt-paper .receipt-barcode svg {
+      display: block;
+      width: 100%;
+      height: 52px;
+      margin: 0 auto 4px;
+    }
+
+    .utility-site .receipt-paper .receipt-barcode-number {
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 1050px) {
+      .utility-site .receipt-builder {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /*
+     * The print dialog controls the actual paper size. Select your
+     * printer's 80 mm roll-paper option if one is available.
+     */
+    @media print {
+      @page {
+        margin: 0;
+      }
+
+      html,
+      body.utility-site {
+        width: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+      }
+
+      .utility-site #tools-header,
+      .utility-site #tools-footer,
+      .utility-site .receipt-editor,
+      .utility-site .receipt-preview-column > h2,
+      .utility-site .receipt-preview-column > .hint,
+      .utility-site .receipt-page-title,
+      .utility-site .receipt-page-intro,
+      .utility-site .receipt-page-ad,
+      .utility-site #error-banner,
+      .utility-site .receipt-faq {
+        display: none !important;
+      }
+
+      .utility-site .main-content,
+      .utility-site .receipt-builder,
+      .utility-site .receipt-preview-column {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .utility-site .receipt-paper {
+        width: 72mm !important;
+        max-width: 72mm !important;
+        min-width: 0 !important;
+        margin: 0 auto !important;
+        padding: 3mm 1mm 6mm !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        color: #111111 !important;
+      }
+    }
+  </style>
+
   <script src="../js/shared.js" defer></script>
-  <script src="../js/document-tools.js" defer></script>
-  <script src="../js/receipt-maker.js" defer></script>
 </head>
-<body class="utility-site document-page receipt-page" data-home="./">
+
+<body class="utility-site" data-home="./">
   <div id="tools-header"></div>
 
   <main class="wrap main-content">
-    <h1>Receipt maker</h1>
-    <p class="page-intro">
-      Create a narrow, store-style receipt based on the layout you provided.
-      Customize every business and transaction detail.
+    <h1 class="receipt-page-title">Receipt maker</h1>
+
+    <p class="page-intro receipt-page-intro">
+      Create a customizable store-style receipt with a live thermal-paper preview.
     </p>
 
-    <!-- AD_SLOT_TOP: Paste an optional ad snippet inside this empty container. -->
-    <div class="ad-slot" aria-label="Advertisement"></div>
+    <!-- AD_SLOT_TOP: Optional advertising snippet. -->
+    <div class="ad-slot receipt-page-ad" aria-label="Advertisement"></div>
 
-    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+    <div id="error-banner" class="error-banner"
+         role="alert" hidden></div>
 
-    <div class="document-workspace">
-      <div class="document-editor">
+    <div class="receipt-builder">
+      <div class="receipt-editor">
         <section class="panel" aria-labelledby="store-heading">
           <h2 id="store-heading">Store details</h2>
 
-          <label for="rec-store">Store or business name *</label>
-          <input id="rec-store" type="text" maxlength="80" required
+          <label for="store-name">Store or business name *</label>
+          <input id="store-name" type="text" maxlength="80"
                  placeholder="Your store name">
 
-          <label for="rec-logo">Store logo (optional)</label>
-          <input id="rec-logo" type="file"
+          <label for="store-logo">Logo (optional)</label>
+          <input id="store-logo" type="file"
                  accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp">
           <p class="hint">
-            PNG, JPG or WebP; maximum 1 MB. Only upload a logo you are allowed to use.
+            PNG, JPG or WebP, up to 1 MB. Use only a logo you have permission to use.
           </p>
-          <button id="rec-remove-logo" class="btn" type="button">
+          <button id="remove-logo" class="btn" type="button">
             Remove logo
           </button>
 
           <div class="cols-2">
             <div>
-              <label for="rec-website">Website</label>
-              <input id="rec-website" type="text" maxlength="100"
+              <label for="store-website">Website</label>
+              <input id="store-website" type="text" maxlength="100"
                      placeholder="yourstore.com">
             </div>
+
             <div>
-              <label for="rec-store-number">Store number</label>
-              <input id="rec-store-number" type="text" maxlength="40">
+              <label for="store-number">Store number</label>
+              <input id="store-number" type="text" maxlength="40">
             </div>
+
             <div>
-              <label for="rec-phone">Telephone</label>
-              <input id="rec-phone" type="text" maxlength="50">
+              <label for="store-phone">Telephone</label>
+              <input id="store-phone" type="text" maxlength="50">
             </div>
+
             <div>
-              <label for="rec-tax-id">Tax / VAT ID</label>
-              <input id="rec-tax-id" type="text" maxlength="60">
+              <label for="store-tax-id">Tax or VAT ID</label>
+              <input id="store-tax-id" type="text" maxlength="60">
             </div>
           </div>
 
-          <label for="rec-address">Store address</label>
-          <textarea id="rec-address" rows="3"></textarea>
+          <label for="store-address">Store address</label>
+          <textarea id="store-address" rows="3"
+                    placeholder="Street address&#10;City and postal code"></textarea>
         </section>
 
         <section class="panel" aria-labelledby="transaction-heading">
@@ -94,13 +364,14 @@
 
           <div class="cols-2">
             <div>
-              <label for="rec-number">Receipt number *</label>
-              <input id="rec-number" type="text" maxlength="35" required
+              <label for="receipt-number">Receipt number *</label>
+              <input id="receipt-number" type="text" maxlength="40"
                      placeholder="R-001">
             </div>
+
             <div>
-              <label for="rec-currency">Currency</label>
-              <select id="rec-currency">
+              <label for="receipt-currency">Currency</label>
+              <select id="receipt-currency">
                 <option value="USD">USD — US dollar</option>
                 <option value="GBP">GBP — British pound</option>
                 <option value="EUR">EUR — euro</option>
@@ -108,190 +379,1041 @@
                 <option value="AUD">AUD — Australian dollar</option>
               </select>
             </div>
+
             <div>
-              <label for="rec-datetime">Date and time *</label>
-              <input id="rec-datetime" type="datetime-local" required>
+              <label for="receipt-datetime">Date and time *</label>
+              <input id="receipt-datetime" type="datetime-local">
             </div>
+
             <div>
-              <label for="rec-cashier">Salesperson / cashier</label>
-              <input id="rec-cashier" type="text" maxlength="60">
+              <label for="receipt-cashier">Salesperson or cashier</label>
+              <input id="receipt-cashier" type="text" maxlength="60">
             </div>
           </div>
 
-          <label for="rec-copy">Copy label</label>
-          <input id="rec-copy" type="text" maxlength="35"
+          <label for="copy-label">Copy label</label>
+          <input id="copy-label" type="text" maxlength="40"
                  value="CUSTOMER COPY">
 
-          <label for="rec-intro">Message above the items</label>
-          <textarea id="rec-intro" rows="2"
-                    placeholder="Please retain this receipt for your records."></textarea>
+          <label for="intro-message">Message above items</label>
+          <textarea id="intro-message" rows="2">Please retain this receipt for your records.</textarea>
         </section>
 
-        <section class="panel" aria-labelledby="receipt-items-heading">
-          <h2 id="receipt-items-heading">Purchased items</h2>
+        <section class="panel" aria-labelledby="items-heading">
+          <h2 id="items-heading">Purchased items</h2>
 
-          <div id="rec-items" class="editable-items"></div>
+          <div id="item-editor"></div>
 
           <div class="actions">
-            <button id="rec-add-item" class="btn" type="button">
+            <button id="add-item" class="btn" type="button">
               Add item
             </button>
           </div>
         </section>
 
         <section class="panel" aria-labelledby="payment-heading">
-          <h2 id="payment-heading">Tax, payment and footer</h2>
+          <h2 id="payment-heading">Totals and payment</h2>
+
+          <p class="hint">
+            A fixed discount is subtracted before tax. Tax is then added
+            to the discounted subtotal.
+          </p>
 
           <div class="cols-2">
             <div>
-              <label for="rec-tax">Tax rate (%)</label>
-              <input id="rec-tax" type="number" min="0" max="100"
-                     step="0.01" value="0">
+              <label for="discount">Fixed discount</label>
+              <input id="discount" type="number"
+                     min="0" max="1000000" step="0.01" value="0">
             </div>
+
             <div>
-              <label for="rec-payment-method">Payment method</label>
-              <input id="rec-payment-method" type="text" maxlength="40"
-                     placeholder="CARD SALE">
-            </div>
-            <div>
-              <label for="rec-card-last4">Card last 4 digits (optional)</label>
-              <input id="rec-card-last4" type="text" inputmode="numeric"
-                     maxlength="4" pattern="[0-9]{4}"
-                     placeholder="1234">
-            </div>
-            <div>
-              <label for="rec-auth">Authorization code (optional)</label>
-              <input id="rec-auth" type="text" maxlength="25">
+              <label for="tax-rate">Tax rate (%)</label>
+              <input id="tax-rate" type="number"
+                     min="0" max="100" step="0.01" value="0">
             </div>
           </div>
 
-          <label for="rec-policy">Returns policy / closing message</label>
-          <textarea id="rec-policy" rows="3"
-                    placeholder="Thank you for shopping with us."></textarea>
+          <label for="payment-method">Payment method</label>
+          <select id="payment-method">
+            <option value="CARD SALE">Card</option>
+            <option value="CASH">Cash</option>
+            <option value="OTHER PAYMENT">Other</option>
+          </select>
 
-          <label for="rec-barcode">Barcode value (optional, 1–18 digits)</label>
-          <input id="rec-barcode" type="text" inputmode="numeric"
-                 maxlength="18" pattern="[0-9]{1,18}"
-                 placeholder="Your receipt reference">
+          <div id="card-fields">
+            <div class="cols-2">
+              <div>
+                <label for="card-last-four">Card last four digits (optional)</label>
+                <input id="card-last-four" type="text"
+                       inputmode="numeric" maxlength="4"
+                       placeholder="1234">
+              </div>
+
+              <div>
+                <label for="auth-code">Authorization code (optional)</label>
+                <input id="auth-code" type="text" maxlength="25">
+              </div>
+            </div>
+          </div>
+
+          <div id="cash-fields" hidden>
+            <label for="cash-tendered">
+              Cash received (optional)
+            </label>
+            <input id="cash-tendered" type="number"
+                   min="0" max="1000000" step="0.01"
+                   placeholder="Leave empty if not needed">
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="footer-heading">
+          <h2 id="footer-heading">Footer and barcode</h2>
+
+          <label for="footer-message">
+            Returns policy or closing message
+          </label>
+          <textarea id="footer-message" rows="3">Thank you for your purchase.</textarea>
+
+          <label for="barcode-value">
+            Barcode reference (optional; 1–12 digits)
+          </label>
+          <input id="barcode-value" type="text"
+                 inputmode="numeric" maxlength="12"
+                 placeholder="Receipt reference">
+
           <p class="hint">
-            Generates a Code 39 barcode representing these digits. It is a
-            receipt reference, not a payment or product barcode.
+            The barcode encodes only the digits you enter. It does not
+            register a sale or connect to a store system.
           </p>
         </section>
 
-        <div class="actions document-actions">
-          <button id="rec-print" class="btn primary" type="button">
+        <div class="actions">
+          <button id="print-receipt" class="btn primary"
+                  type="button">
             Print / Save as PDF
           </button>
         </div>
 
         <p class="privacy-notice">
-          Privacy: Receipt details and uploaded logos are processed locally on
-          your device. This tool does not upload them or automatically save them.
+          Privacy: Details and logos are processed in this browser tab.
+          This tool does not upload or automatically save them.
           Create receipts only for transactions you are authorized to document.
         </p>
       </div>
 
-      <div class="document-preview-column">
+      <div class="receipt-preview-column">
         <h2>Live preview</h2>
         <p class="hint">
-          For a thermal printer, choose its 80 mm paper setting in the print dialog.
+          For a thermal printer, select its 80 mm paper setting in the print dialog.
         </p>
 
-        <article id="receipt-paper" class="document-paper receipt-paper"
-                 aria-label="Store receipt preview">
-          <header class="receipt-store">
-            <img id="out-rec-logo" class="receipt-logo" alt="" hidden>
-            <h2 id="out-rec-store"></h2>
-            <div id="out-rec-website"></div>
-            <div id="out-rec-store-number"></div>
-            <div id="out-rec-phone"></div>
-            <div id="out-rec-address" class="preserve-lines"></div>
-            <div id="out-rec-tax-id"></div>
+        <article class="receipt-paper" id="receipt-paper"
+                 aria-label="Receipt preview">
+          <header class="receipt-center">
+            <img id="preview-logo" class="receipt-logo"
+                 alt="" hidden>
+
+            <h2 id="preview-store-name" class="receipt-store-name">
+              Your store
+            </h2>
+
+            <div id="preview-website" hidden></div>
+            <div id="preview-store-number" hidden></div>
+            <div id="preview-phone" hidden></div>
+            <div id="preview-address" class="receipt-lines" hidden></div>
+            <div id="preview-tax-id" hidden></div>
           </header>
 
-          <div class="receipt-intro preserve-lines"
-               id="out-rec-intro" hidden></div>
+          <div id="preview-intro"
+               class="receipt-intro receipt-lines"
+               hidden></div>
 
-          <div class="receipt-divider receipt-stars">
-            <span id="out-rec-copy">CUSTOMER COPY</span>
+          <div class="receipt-divider">
+            <span id="preview-copy-label">CUSTOMER COPY</span>
           </div>
 
-          <div class="receipt-transaction">
+          <div class="receipt-meta">
             <div class="receipt-pair">
-              <span>Receipt:</span><span id="out-rec-number"></span>
+              <span>Receipt:</span>
+              <span id="preview-receipt-number">—</span>
             </div>
+
             <div class="receipt-pair">
-              <span>Date:</span><span id="out-rec-datetime"></span>
+              <span>Date:</span>
+              <span id="preview-datetime">—</span>
             </div>
-            <div id="out-rec-cashier-line" hidden>
-              Salesperson: <span id="out-rec-cashier"></span>
+
+            <div id="preview-cashier-line" hidden>
+              Salesperson: <span id="preview-cashier"></span>
             </div>
           </div>
 
-          <div id="out-rec-items" class="receipt-items"></div>
+          <div id="preview-items"></div>
 
           <div class="receipt-totals">
             <div class="receipt-pair">
-              <span>SUBTOTAL</span><span id="out-rec-subtotal"></span>
+              <span>SUBTOTAL</span>
+              <span id="preview-subtotal">—</span>
             </div>
+
+            <div id="preview-discount-line"
+                 class="receipt-pair" hidden>
+              <span>DISCOUNT</span>
+              <span id="preview-discount"></span>
+            </div>
+
             <div class="receipt-pair">
-              <span id="out-rec-tax-label">TAX</span>
-              <span id="out-rec-tax"></span>
+              <span id="preview-tax-label">TAX (0%)</span>
+              <span id="preview-tax">—</span>
             </div>
-            <div class="receipt-pair receipt-total">
-              <span>TOTAL</span><span id="out-rec-total"></span>
+
+            <div class="receipt-pair receipt-grand-total">
+              <span>TOTAL</span>
+              <span id="preview-total">—</span>
             </div>
           </div>
 
-          <div id="out-rec-payment-block" class="receipt-payment" hidden>
+          <div class="receipt-payment">
             <div class="receipt-pair">
-              <span id="out-rec-payment-method"></span>
-              <span id="out-rec-payment-total"></span>
+              <span id="preview-payment-method">CARD SALE</span>
+              <span id="preview-payment-total">—</span>
             </div>
-            <div id="out-rec-card-line" hidden>
-              Card #: ************<span id="out-rec-card-last4"></span>
+
+            <div id="preview-card-line" hidden>
+              Card #: ************<span id="preview-card-last-four"></span>
             </div>
-            <div id="out-rec-auth-line" hidden>
-              Auth Code: <span id="out-rec-auth"></span>
+
+            <div id="preview-auth-line" hidden>
+              Auth Code: <span id="preview-auth"></span>
+            </div>
+
+            <div id="preview-cash-line" class="receipt-pair" hidden>
+              <span>CASH RECEIVED</span>
+              <span id="preview-cash"></span>
+            </div>
+
+            <div id="preview-change-line" class="receipt-pair" hidden>
+              <span>CHANGE</span>
+              <span id="preview-change"></span>
             </div>
           </div>
 
           <footer class="receipt-footer">
-            <p id="out-rec-policy" class="preserve-lines" hidden></p>
-            <div id="out-rec-barcode-block" class="receipt-barcode-block"
-                 hidden>
-              <svg id="out-rec-barcode-svg"
+            <p id="preview-footer-message"
+               class="receipt-footer-message receipt-lines"
+               hidden></p>
+
+            <div id="preview-barcode-block"
+                 class="receipt-barcode" hidden>
+              <svg id="preview-barcode"
                    xmlns="http://www.w3.org/2000/svg"
                    role="img"
                    aria-label="Receipt reference barcode"></svg>
-              <div id="out-rec-barcode-number"></div>
+
+              <div id="preview-barcode-number"
+                   class="receipt-barcode-number"></div>
             </div>
           </footer>
         </article>
       </div>
     </div>
 
-    <section class="faq" aria-labelledby="rec-faq-heading">
-      <h2 id="rec-faq-heading">How it works & FAQ</h2>
+    <section class="faq receipt-faq"
+             aria-labelledby="faq-heading">
+      <h2 id="faq-heading">How it works & FAQ</h2>
 
       <div class="panel">
-        <h3>Can I change the details from the sample receipt?</h3>
-        <p>Yes. Enter your own store identity, items, prices, salesperson, tax, payment label, returns message, logo and receipt reference.</p>
+        <h3>Can I change the store-style layout?</h3>
+        <p>Yes. Enter your own store information, upload an authorized logo, add or remove items, and edit the messages, tax and payment details. The narrow preview updates as you type.</p>
       </div>
 
       <div class="panel">
-        <h3>How do I print a narrow receipt?</h3>
-        <p>Use Print / Save as PDF and choose an 80 mm paper size if your printer or print dialog offers one. Browser PDF output may instead use standard page sizes.</p>
+        <h3>How do I print or save the receipt?</h3>
+        <p>Complete the required fields and choose Print / Save as PDF. For a thermal printer, select its 80 mm paper option if available. Available paper settings depend on your browser and printer. [developer.mozilla.org](https://developer.mozilla.org/docs/Web/CSS/Reference/At-rules/%40page)</p>
       </div>
 
       <div class="panel">
-        <h3>Does the barcode connect to a store system?</h3>
-        <p>No. It encodes only the digits you enter. It does not create a transaction in a payment processor, point-of-sale system or store database.</p>
+        <h3>Does the barcode prove a purchase?</h3>
+        <p>No. It only represents the reference digits you enter. This tool does not verify transactions or process payments.</p>
       </div>
     </section>
   </main>
 
   <div id="tools-footer"></div>
+
+  <script>
+    "use strict";
+
+    (() => {
+      const get = id => document.getElementById(id);
+      const editor = document.querySelector(".receipt-editor");
+      const itemsEditor = get("item-editor");
+      const itemsPreview = get("preview-items");
+      const banner = get("error-banner");
+      const svgNamespace = "http://www.w3.org/2000/svg";
+
+      let logoDataUrl = "";
+
+      function value(id) {
+        return get(id).value.trim();
+      }
+
+      function text(id, content) {
+        get(id).textContent = content;
+      }
+
+      function optionalText(id, content) {
+        const element = get(id);
+        element.textContent = content;
+        element.hidden = !content;
+      }
+
+      function error(message) {
+        banner.textContent = message;
+        banner.hidden = !message;
+
+        if (message) {
+          banner.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+          });
+        }
+      }
+
+      function currency() {
+        return value("receipt-currency");
+      }
+
+      function money(cents) {
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: currency()
+        }).format(cents / 100);
+      }
+
+      function decimal(raw, label, maximum, places) {
+        const expression = places === 0
+          ? /^\d+$/
+          : new RegExp(`^\\d+(?:\\.\\d{1,${places}})?$`);
+
+        if (!expression.test(String(raw).trim())) {
+          throw new Error(
+            `${label} must be a nonnegative number with at most ` +
+            `${places} decimal place(s).`
+          );
+        }
+
+        const number = Number(raw);
+
+        if (!Number.isFinite(number) || number > maximum) {
+          throw new Error(
+            `${label} must not exceed ${maximum}.`
+          );
+        }
+
+        return number;
+      }
+
+      function cents(raw, label) {
+        return Math.round(decimal(raw, label, 1000000, 2) * 100);
+      }
+
+      function localDateTimeNow() {
+        const now = new Date();
+        const local = new Date(
+          now.getTime() - now.getTimezoneOffset() * 60000
+        );
+
+        return local.toISOString().slice(0, 16);
+      }
+
+      function formatDateTime(raw) {
+        const match =
+          /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(raw);
+
+        if (!match) {
+          throw new Error("Enter a valid receipt date and time.");
+        }
+
+        const year = Number(match[1]);
+        const month = Number(match[2]);
+        const day = Number(match[3]);
+        const hour = Number(match[4]);
+        const minute = Number(match[5]);
+
+        const date = new Date(year, month - 1, day);
+
+        if (
+          date.getFullYear() !== year ||
+          date.getMonth() !== month - 1 ||
+          date.getDate() !== day ||
+          hour > 23 ||
+          minute > 59
+        ) {
+          throw new Error("Enter a valid receipt date and time.");
+        }
+
+        const dateText = date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric"
+        });
+
+        return `${dateText} ` +
+          `${String(hour).padStart(2, "0")}:` +
+          `${String(minute).padStart(2, "0")}`;
+      }
+
+      function labeledInput(labelText, className, type, defaultValue) {
+        const label = document.createElement("label");
+        label.textContent = labelText;
+
+        const input = document.createElement("input");
+        input.type = type;
+        input.className = className;
+        input.value = defaultValue;
+
+        if (type === "number") {
+          input.min = className === "item-quantity" ? "1" : "0";
+          input.max = className === "item-quantity"
+            ? "100000"
+            : "1000000";
+          input.step = className === "item-quantity"
+            ? "1"
+            : "0.01";
+        } else {
+          input.maxLength = className === "item-name" ? 120 : 45;
+        }
+
+        label.append(input);
+        return label;
+      }
+
+      function addItem() {
+        const item = document.createElement("div");
+        item.className = "receipt-form-item";
+
+        const heading = document.createElement("strong");
+        heading.textContent = "Receipt item";
+
+        const name = labeledInput(
+          "Item description",
+          "item-name",
+          "text",
+          ""
+        );
+
+        const columns = document.createElement("div");
+        columns.className = "cols-2";
+        columns.append(
+          labeledInput("Quantity", "item-quantity", "number", "1"),
+          labeledInput("Unit price", "item-price", "number", "0.00")
+        );
+
+        const sku = labeledInput(
+          "Item code / SKU (optional)",
+          "item-sku",
+          "text",
+          ""
+        );
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "btn";
+        remove.textContent = "Remove item";
+
+        remove.addEventListener("click", () => {
+          item.remove();
+          render();
+        });
+
+        item.append(heading, name, columns, sku, remove);
+        itemsEditor.append(item);
+        render();
+
+        return item;
+      }
+
+      function readItems(strict) {
+        const result = [];
+
+        for (const item of itemsEditor.querySelectorAll(
+          ".receipt-form-item"
+        )) {
+          const name = item.querySelector(".item-name").value.trim();
+          const quantityRaw =
+            item.querySelector(".item-quantity").value;
+          const priceRaw =
+            item.querySelector(".item-price").value;
+          const sku = item.querySelector(".item-sku").value.trim();
+
+          if (!name) {
+            if (strict) {
+              throw new Error(
+                "Every item needs a description. Remove unused items."
+              );
+            }
+
+            continue;
+          }
+
+          const quantity = decimal(
+            quantityRaw,
+            "Item quantity",
+            100000,
+            0
+          );
+
+          if (quantity === 0) {
+            throw new Error(
+              "Item quantity must be at least 1."
+            );
+          }
+
+          const unitCents = cents(priceRaw, "Unit price");
+          const amountCents = quantity * unitCents;
+
+          if (amountCents > 1000000000) {
+            throw new Error(
+              "An item exceeds the supported amount."
+            );
+          }
+
+          result.push({
+            name,
+            quantity,
+            unitCents,
+            amountCents,
+            sku
+          });
+        }
+
+        if (strict && !result.length) {
+          throw new Error(
+            "Add at least one completed receipt item."
+          );
+        }
+
+        return result;
+      }
+
+      function calculate(rows) {
+        const subtotal = rows.reduce(
+          (sum, row) => sum + row.amountCents,
+          0
+        );
+
+        if (subtotal > 1000000000) {
+          throw new Error(
+            "The receipt subtotal exceeds the supported amount."
+          );
+        }
+
+        const discount = cents(
+          get("discount").value,
+          "Discount"
+        );
+
+        if (discount > subtotal) {
+          throw new Error(
+            "The discount cannot exceed the subtotal."
+          );
+        }
+
+        const taxRate = decimal(
+          get("tax-rate").value,
+          "Tax rate",
+          100,
+          2
+        );
+
+        const tax = Math.round(
+          (subtotal - discount) * taxRate / 100
+        );
+
+        const total = subtotal - discount + tax;
+
+        if (total > 1000000000) {
+          throw new Error(
+            "The receipt total exceeds the supported amount."
+          );
+        }
+
+        let cashReceived = null;
+
+        if (
+          value("payment-method") === "CASH" &&
+          get("cash-tendered").value.trim() !== ""
+        ) {
+          cashReceived = cents(
+            get("cash-tendered").value,
+            "Cash received"
+          );
+
+          if (cashReceived < total) {
+            throw new Error(
+              "Cash received cannot be less than the total."
+            );
+          }
+        }
+
+        return {
+          subtotal,
+          discount,
+          taxRate,
+          tax,
+          total,
+          cashReceived
+        };
+      }
+
+      function appendItemPreview(row) {
+        const item = document.createElement("div");
+        item.className = "receipt-item";
+
+        const main = document.createElement("div");
+        main.className = "receipt-item-main";
+
+        const name = document.createElement("span");
+        name.textContent = row.name;
+
+        const amount = document.createElement("span");
+        amount.textContent = money(row.amountCents);
+
+        main.append(name, amount);
+        item.append(main);
+
+        const detail = document.createElement("div");
+        detail.className = "receipt-item-detail";
+        detail.textContent =
+          `${row.quantity} × ${money(row.unitCents)}`;
+        item.append(detail);
+
+        if (row.sku) {
+          const sku = document.createElement("div");
+          sku.className = "receipt-item-detail";
+          sku.textContent = row.sku;
+          item.append(sku);
+        }
+
+        itemsPreview.append(item);
+      }
+
+      function showInvalidAmounts() {
+        for (const id of [
+          "preview-subtotal",
+          "preview-tax",
+          "preview-total",
+          "preview-payment-total"
+        ]) {
+          text(id, "—");
+        }
+
+        get("preview-discount-line").hidden = true;
+        get("preview-cash-line").hidden = true;
+        get("preview-change-line").hidden = true;
+      }
+
+      /*
+       * Code 39: nine alternating bar/space elements per character.
+       * A 1 bit means that element is wide; 0 means narrow.
+       * These digit and start/stop patterns follow the Code 39 mapping.
+       */
+      const digitPatterns = [
+        0x034, 0x121, 0x061, 0x160, 0x031,
+        0x130, 0x070, 0x025, 0x124, 0x064
+      ];
+
+      const startStopPattern = 0x094;
+
+      function drawBarcode(digits) {
+        const block = get("preview-barcode-block");
+        const svg = get("preview-barcode");
+
+        svg.replaceChildren();
+        text("preview-barcode-number", digits);
+        block.hidden = !digits;
+
+        if (!/^\d{1,12}$/.test(digits)) {
+          block.hidden = true;
+          return;
+        }
+
+        let position = 10;
+
+        function symbol(pattern) {
+          for (let index = 0; index < 9; index++) {
+            const wide =
+              (pattern & (1 << (8 - index))) !== 0;
+
+            const width = wide ? 3 : 1;
+
+            if (index % 2 === 0) {
+              const bar = document.createElementNS(
+                svgNamespace,
+                "rect"
+              );
+
+              bar.setAttribute("x", String(position));
+              bar.setAttribute("y", "0");
+              bar.setAttribute("width", String(width));
+              bar.setAttribute("height", "50");
+              bar.setAttribute("fill", "#000");
+
+              svg.append(bar);
+            }
+
+            position += width;
+          }
+        }
+
+        symbol(startStopPattern);
+        position += 1;
+
+        for (const digit of digits) {
+          symbol(digitPatterns[Number(digit)]);
+          position += 1;
+        }
+
+        symbol(startStopPattern);
+
+        svg.setAttribute(
+          "viewBox",
+          `0 0 ${position + 10} 50`
+        );
+
+        svg.setAttribute(
+          "preserveAspectRatio",
+          "xMidYMid meet"
+        );
+      }
+
+      function render() {
+        text(
+          "preview-store-name",
+          value("store-name") || "Your store"
+        );
+
+        optionalText(
+          "preview-website",
+          value("store-website")
+        );
+
+        optionalText(
+          "preview-store-number",
+          value("store-number")
+            ? `Store: ${value("store-number")}`
+            : ""
+        );
+
+        optionalText(
+          "preview-phone",
+          value("store-phone")
+            ? `Telephone: ${value("store-phone")}`
+            : ""
+        );
+
+        optionalText(
+          "preview-address",
+          value("store-address")
+        );
+
+        optionalText(
+          "preview-tax-id",
+          value("store-tax-id")
+            ? `Tax / VAT ID: ${value("store-tax-id")}`
+            : ""
+        );
+
+        optionalText(
+          "preview-intro",
+          value("intro-message")
+        );
+
+        text(
+          "preview-copy-label",
+          value("copy-label") || "CUSTOMER COPY"
+        );
+
+        text(
+          "preview-receipt-number",
+          value("receipt-number") || "—"
+        );
+
+        try {
+          text(
+            "preview-datetime",
+            value("receipt-datetime")
+              ? formatDateTime(value("receipt-datetime"))
+              : "—"
+          );
+        } catch (_) {
+          text("preview-datetime", "—");
+        }
+
+        const cashier = value("receipt-cashier");
+        text("preview-cashier", cashier);
+        get("preview-cashier-line").hidden = !cashier;
+
+        optionalText(
+          "preview-footer-message",
+          value("footer-message")
+        );
+
+        const paymentMethod = value("payment-method");
+        text("preview-payment-method", paymentMethod);
+
+        get("card-fields").hidden =
+          paymentMethod !== "CARD SALE";
+
+        get("cash-fields").hidden =
+          paymentMethod !== "CASH";
+
+        const lastFour = value("card-last-four");
+        const authCode = value("auth-code");
+
+        text("preview-card-last-four", lastFour);
+        text("preview-auth", authCode);
+
+        get("preview-card-line").hidden =
+          paymentMethod !== "CARD SALE" || !lastFour;
+
+        get("preview-auth-line").hidden =
+          paymentMethod !== "CARD SALE" || !authCode;
+
+        drawBarcode(value("barcode-value"));
+
+        itemsPreview.replaceChildren();
+
+        try {
+          const rows = readItems(false);
+
+          if (rows.length) {
+            rows.forEach(appendItemPreview);
+          } else {
+            const message = document.createElement("p");
+            message.textContent =
+              "Add an item to preview your receipt.";
+            itemsPreview.append(message);
+          }
+
+          const totals = calculate(rows);
+
+          text(
+            "preview-subtotal",
+            money(totals.subtotal)
+          );
+
+          text(
+            "preview-discount",
+            `−${money(totals.discount)}`
+          );
+
+          get("preview-discount-line").hidden =
+            totals.discount === 0;
+
+          text(
+            "preview-tax-label",
+            `TAX (${totals.taxRate}%)`
+          );
+
+          text("preview-tax", money(totals.tax));
+          text("preview-total", money(totals.total));
+
+          text(
+            "preview-payment-total",
+            money(totals.total)
+          );
+
+          const showCash =
+            paymentMethod === "CASH" &&
+            totals.cashReceived !== null;
+
+          get("preview-cash-line").hidden = !showCash;
+          get("preview-change-line").hidden = !showCash;
+
+          if (showCash) {
+            text(
+              "preview-cash",
+              money(totals.cashReceived)
+            );
+
+            text(
+              "preview-change",
+              money(totals.cashReceived - totals.total)
+            );
+          }
+        } catch (_) {
+          // Keep editing possible while an amount is incomplete.
+          itemsPreview.replaceChildren();
+
+          const message = document.createElement("p");
+          message.textContent =
+            "Finish editing item amounts to see the totals.";
+          itemsPreview.append(message);
+
+          showInvalidAmounts();
+        }
+      }
+
+      function validateForPrint() {
+        if (!value("store-name")) {
+          throw new Error(
+            "Enter your store or business name."
+          );
+        }
+
+        if (!value("receipt-number")) {
+          throw new Error(
+            "Enter a receipt number."
+          );
+        }
+
+        formatDateTime(value("receipt-datetime"));
+
+        const lastFour = value("card-last-four");
+
+        if (
+          value("payment-method") === "CARD SALE" &&
+          lastFour &&
+          !/^\d{4}$/.test(lastFour)
+        ) {
+          throw new Error(
+            "The optional card ending must be exactly four digits."
+          );
+        }
+
+        const barcode = value("barcode-value");
+
+        if (
+          barcode &&
+          !/^\d{1,12}$/.test(barcode)
+        ) {
+          throw new Error(
+            "The optional barcode reference must contain 1–12 digits."
+          );
+        }
+
+        const rows = readItems(true);
+        calculate(rows);
+      }
+
+      editor.addEventListener("input", event => {
+        if (event.target.id !== "store-logo") {
+          error("");
+          render();
+        }
+      });
+
+      editor.addEventListener("change", event => {
+        if (event.target.id !== "store-logo") {
+          error("");
+          render();
+        }
+      });
+
+      get("add-item").addEventListener("click", () => {
+        const item = addItem();
+        item.querySelector(".item-name").focus();
+      });
+
+      get("store-logo").addEventListener(
+        "change",
+        async event => {
+          error("");
+
+          const input = event.currentTarget;
+          const file = input.files[0];
+
+          if (!file) return;
+
+          if (
+            !["image/png", "image/jpeg", "image/webp"].includes(
+              file.type
+            ) ||
+            file.size > 1048576
+          ) {
+            input.value = "";
+            error(
+              "Choose a PNG, JPG or WebP logo no larger than 1 MB."
+            );
+            return;
+          }
+
+          try {
+            const dataUrl = await new Promise(
+              (resolve, reject) => {
+                const reader = new FileReader();
+
+                reader.onload = () =>
+                  resolve(reader.result);
+
+                reader.onerror = () =>
+                  reject(
+                    new Error("Could not read the logo.")
+                  );
+
+                reader.readAsDataURL(file);
+              }
+            );
+
+            const testImage = new Image();
+            testImage.src = dataUrl;
+            await testImage.decode();
+
+            logoDataUrl = dataUrl;
+
+            const preview = get("preview-logo");
+            preview.src = logoDataUrl;
+            preview.hidden = false;
+          } catch (_) {
+            error(
+              "That logo could not be opened. Try another image."
+            );
+          } finally {
+            input.value = "";
+          }
+        }
+      );
+
+      get("remove-logo").addEventListener(
+        "click",
+        () => {
+          logoDataUrl = "";
+
+          const preview = get("preview-logo");
+          preview.removeAttribute("src");
+          preview.hidden = true;
+
+          get("store-logo").value = "";
+          error("");
+        }
+      );
+
+      get("print-receipt").addEventListener(
+        "click",
+        () => {
+          error("");
+
+          try {
+            validateForPrint();
+            render();
+            window.print();
+          } catch (problem) {
+            error(
+              problem.message ||
+              "Check your receipt details before printing."
+            );
+          }
+        }
+      );
+
+      get("receipt-datetime").value =
+        localDateTimeNow();
+
+      addItem();
+      render();
+    })();
+  </script>
 </body>
 </html>
