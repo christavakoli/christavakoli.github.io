@@ -6,13 +6,15 @@
   const home = document.body.dataset.home || "./";
   const current = location.pathname.split("/").pop() || "index.html";
 
-  const links = [
-    ["PDF", "merge-pdf.html"],
-    ["Images", "image-converter.html"],
-    ["JSON/CSV", "json-csv.html"],
-    ["Text", "text-tools.html"],
-    ["QR", "qr-generator.html"]
-  ];
+const links = [
+  ["PDF", "merge-pdf.html"],
+  ["Images", "image-converter.html"],
+  ["JSON/CSV", "json-csv.html"],
+  ["Text", "text-tools.html"],
+  ["QR", "qr-generator.html"],
+  ["Invoices", "invoice-maker.html"],
+  ["Receipts", "receipt-maker.html"]
+];
 
   const header = document.getElementById("tools-header");
   const footer = document.getElementById("tools-footer");
