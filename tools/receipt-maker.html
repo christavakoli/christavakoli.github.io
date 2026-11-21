@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+
+  <title>Editable Store-Style Receipt Maker | Christa Vakoli</title>
+  <meta name="description" content="Create an editable thermal-paper-style store receipt with items, tax, payment details and a barcode. Print or save as PDF locally.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://christavakoli.com/tools/receipt-maker.html">
+  <meta property="og:title" content="Editable Store-Style Receipt Maker">
+  <meta property="og:description" content="Create and print your own store-style receipts locally.">
+  <link rel="canonical" href="https://christavakoli.com/tools/receipt-maker.html">
+
+  <link rel="stylesheet" href="../css/tools.css">
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Store-Style Receipt Maker",
+      "url": "https://christavakoli.com/tools/receipt-maker.html",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any modern browser",
+      "description": "Create editable thermal-paper-style receipts locally in a browser."
+    }
+  </script>
+
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/document-tools.js" defer></script>
+  <script src="../js/receipt-maker.js" defer></script>
+</head>
+<body class="utility-site document-page receipt-page" data-home="./">
+  <div id="tools-header"></div>
+
+  <main class="wrap main-content">
+    <h1>Receipt maker</h1>
+    <p class="page-intro">
+      Create a narrow, store-style receipt based on the layout you provided.
+      Customize every business and transaction detail.
+    </p>
+
+    <!-- AD_SLOT_TOP: Paste an optional ad snippet inside this empty container. -->
+    <div class="ad-slot" aria-label="Advertisement"></div>
+
+    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+
+    <div class="document-workspace">
+      <div class="document-editor">
+        <section class="panel" aria-labelledby="store-heading">
+          <h2 id="store-heading">Store details</h2>
+
+          <label for="rec-store">Store or business name *</label>
+          <input id="rec-store" type="text" maxlength="80" required
+                 placeholder="Your store name">
+
+          <label for="rec-logo">Store logo (optional)</label>
+          <input id="rec-logo" type="file"
+                 accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp">
+          <p class="hint">
+            PNG, JPG or WebP; maximum 1 MB. Only upload a logo you are allowed to use.
+          </p>
+          <button id="rec-remove-logo" class="btn" type="button">
+            Remove logo
+          </button>
+
+          <div class="cols-2">
+            <div>
+              <label for="rec-website">Website</label>
+              <input id="rec-website" type="text" maxlength="100"
+                     placeholder="yourstore.com">
+            </div>
+            <div>
+              <label for="rec-store-number">Store number</label>
+              <input id="rec-store-number" type="text" maxlength="40">
+            </div>
+            <div>
+              <label for="rec-phone">Telephone</label>
+              <input id="rec-phone" type="text" maxlength="50">
+            </div>
+            <div>
+              <label for="rec-tax-id">Tax / VAT ID</label>
+              <input id="rec-tax-id" type="text" maxlength="60">
+            </div>
+          </div>
+
+          <label for="rec-address">Store address</label>
+          <textarea id="rec-address" rows="3"></textarea>
+        </section>
+
+        <section class="panel" aria-labelledby="transaction-heading">
+          <h2 id="transaction-heading">Transaction</h2>
+
+          <div class="cols-2">
+            <div>
+              <label for="rec-number">Receipt number *</label>
+              <input id="rec-number" type="text" maxlength="35" required
+                     placeholder="R-001">
+            </div>
+            <div>
+              <label for="rec-currency">Currency</label>
+              <select id="rec-currency">
+                <option value="USD">USD — US dollar</option>
+                <option value="GBP">GBP — British pound</option>
+                <option value="EUR">EUR — euro</option>
+                <option value="CAD">CAD — Canadian dollar</option>
+                <option value="AUD">AUD — Australian dollar</option>
+              </select>
+            </div>
+            <div>
+              <label for="rec-datetime">Date and time *</label>
+              <input id="rec-datetime" type="datetime-local" required>
+            </div>
+            <div>
+              <label for="rec-cashier">Salesperson / cashier</label>
+              <input id="rec-cashier" type="text" maxlength="60">
+            </div>
+          </div>
+
+          <label for="rec-copy">Copy label</label>
+          <input id="rec-copy" type="text" maxlength="35"
+                 value="CUSTOMER COPY">
+
+          <label for="rec-intro">Message above the items</label>
+          <textarea id="rec-intro" rows="2"
+                    placeholder="Please retain this receipt for your records."></textarea>
+        </section>
+
+        <section class="panel" aria-labelledby="receipt-items-heading">
+          <h2 id="receipt-items-heading">Purchased items</h2>
+
+          <div id="rec-items" class="editable-items"></div>
+
+          <div class="actions">
+            <button id="rec-add-item" class="btn" type="button">
+              Add item
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="payment-heading">
+          <h2 id="payment-heading">Tax, payment and footer</h2>
+
+          <div class="cols-2">
+            <div>
+              <label for="rec-tax">Tax rate (%)</label>
+              <input id="rec-tax" type="number" min="0" max="100"
+                     step="0.01" value="0">
+            </div>
+            <div>
+              <label for="rec-payment-method">Payment method</label>
+              <input id="rec-payment-method" type="text" maxlength="40"
+                     placeholder="CARD SALE">
+            </div>
+            <div>
+              <label for="rec-card-last4">Card last 4 digits (optional)</label>
+              <input id="rec-card-last4" type="text" inputmode="numeric"
+                     maxlength="4" pattern="[0-9]{4}"
+                     placeholder="1234">
+            </div>
+            <div>
+              <label for="rec-auth">Authorization code (optional)</label>
+              <input id="rec-auth" type="text" maxlength="25">
+            </div>
+          </div>
+
+          <label for="rec-policy">Returns policy / closing message</label>
+          <textarea id="rec-policy" rows="3"
+                    placeholder="Thank you for shopping with us."></textarea>
+
+          <label for="rec-barcode">Barcode value (optional, 1–18 digits)</label>
+          <input id="rec-barcode" type="text" inputmode="numeric"
+                 maxlength="18" pattern="[0-9]{1,18}"
+                 placeholder="Your receipt reference">
+          <p class="hint">
+            Generates a Code 39 barcode representing these digits. It is a
+            receipt reference, not a payment or product barcode.
+          </p>
+        </section>
+
+        <div class="actions document-actions">
+          <button id="rec-print" class="btn primary" type="button">
+            Print / Save as PDF
+          </button>
+        </div>
+
+        <p class="privacy-notice">
+          Privacy: Receipt details and uploaded logos are processed locally on
+          your device. This tool does not upload them or automatically save them.
+          Create receipts only for transactions you are authorized to document.
+        </p>
+      </div>
+
+      <div class="document-preview-column">
+        <h2>Live preview</h2>
+        <p class="hint">
+          For a thermal printer, choose its 80 mm paper setting in the print dialog.
+        </p>
+
+        <article id="receipt-paper" class="document-paper receipt-paper"
+                 aria-label="Store receipt preview">
+          <header class="receipt-store">
+            <img id="out-rec-logo" class="receipt-logo" alt="" hidden>
+            <h2 id="out-rec-store"></h2>
+            <div id="out-rec-website"></div>
+            <div id="out-rec-store-number"></div>
+            <div id="out-rec-phone"></div>
+            <div id="out-rec-address" class="preserve-lines"></div>
+            <div id="out-rec-tax-id"></div>
+          </header>
+
+          <div class="receipt-intro preserve-lines"
+               id="out-rec-intro" hidden></div>
+
+          <div class="receipt-divider receipt-stars">
+            <span id="out-rec-copy">CUSTOMER COPY</span>
+          </div>
+
+          <div class="receipt-transaction">
+            <div class="receipt-pair">
+              <span>Receipt:</span><span id="out-rec-number"></span>
+            </div>
+            <div class="receipt-pair">
+              <span>Date:</span><span id="out-rec-datetime"></span>
+            </div>
+            <div id="out-rec-cashier-line" hidden>
+              Salesperson: <span id="out-rec-cashier"></span>
+            </div>
+          </div>
+
+          <div id="out-rec-items" class="receipt-items"></div>
+
+          <div class="receipt-totals">
+            <div class="receipt-pair">
+              <span>SUBTOTAL</span><span id="out-rec-subtotal"></span>
+            </div>
+            <div class="receipt-pair">
+              <span id="out-rec-tax-label">TAX</span>
+              <span id="out-rec-tax"></span>
+            </div>
+            <div class="receipt-pair receipt-total">
+              <span>TOTAL</span><span id="out-rec-total"></span>
+            </div>
+          </div>
+
+          <div id="out-rec-payment-block" class="receipt-payment" hidden>
+            <div class="receipt-pair">
+              <span id="out-rec-payment-method"></span>
+              <span id="out-rec-payment-total"></span>
+            </div>
+            <div id="out-rec-card-line" hidden>
+              Card #: ************<span id="out-rec-card-last4"></span>
+            </div>
+            <div id="out-rec-auth-line" hidden>
+              Auth Code: <span id="out-rec-auth"></span>
+            </div>
+          </div>
+
+          <footer class="receipt-footer">
+            <p id="out-rec-policy" class="preserve-lines" hidden></p>
+            <div id="out-rec-barcode-block" class="receipt-barcode-block"
+                 hidden>
+              <svg id="out-rec-barcode-svg"
+                   xmlns="http://www.w3.org/2000/svg"
+                   role="img"
+                   aria-label="Receipt reference barcode"></svg>
+              <div id="out-rec-barcode-number"></div>
+            </div>
+          </footer>
+        </article>
+      </div>
+    </div>
+
+    <section class="faq" aria-labelledby="rec-faq-heading">
+      <h2 id="rec-faq-heading">How it works & FAQ</h2>
+
+      <div class="panel">
+        <h3>Can I change the details from the sample receipt?</h3>
+        <p>Yes. Enter your own store identity, items, prices, salesperson, tax, payment label, returns message, logo and receipt reference.</p>
+      </div>
+
+      <div class="panel">
+        <h3>How do I print a narrow receipt?</h3>
+        <p>Use Print / Save as PDF and choose an 80 mm paper size if your printer or print dialog offers one. Browser PDF output may instead use standard page sizes.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Does the barcode connect to a store system?</h3>
+        <p>No. It encodes only the digits you enter. It does not create a transaction in a payment processor, point-of-sale system or store database.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="tools-footer"></div>
+</body>
+</html>
