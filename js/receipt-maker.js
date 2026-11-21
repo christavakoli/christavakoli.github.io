@@ -534,7 +534,6 @@
     "Please retain this receipt for your records.";
   D.byId("rec-policy").value =
     "Thank you for your purchase.";
-  D.byId("wifi-security"); // No operation; remove this line if copied from another tool.
 
   addItem();
   render();
