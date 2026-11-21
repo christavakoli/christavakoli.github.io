@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+
+  <title>Free Private Invoice Maker & Printable Invoice | Christa Vakoli</title>
+  <meta name="description" content="Create an editable customer invoice with line items, discounts and tax. Preview, print or save as PDF without uploading customer information.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://christavakoli.com/tools/invoice-maker.html">
+  <meta property="og:title" content="Private Invoice Maker">
+  <meta property="og:description" content="Create and print customer invoices directly in your browser.">
+  <link rel="canonical" href="https://christavakoli.com/tools/invoice-maker.html">
+
+  <link rel="stylesheet" href="../css/tools.css">
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Private Invoice Maker",
+      "url": "https://christavakoli.com/tools/invoice-maker.html",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any modern browser",
+      "description": "Create, preview and print customer invoices locally in the browser."
+    }
+  </script>
+
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/document-tools.js" defer></script>
+  <script src="../js/invoice-maker.js" defer></script>
+</head>
+<body class="utility-site document-page invoice-page" data-home="./">
+  <div id="tools-header"></div>
+
+  <main class="wrap main-content">
+    <h1>Invoice maker</h1>
+    <p class="page-intro">
+      Build a professional customer invoice, then print it or save it as a PDF.
+    </p>
+
+    <!-- AD_SLOT_TOP: Paste an optional ad snippet inside this empty container. -->
+    <div class="ad-slot" aria-label="Advertisement"></div>
+
+    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+
+    <div class="document-workspace">
+      <div class="document-editor">
+        <section class="panel" aria-labelledby="business-heading">
+          <h2 id="business-heading">Your business</h2>
+
+          <label for="inv-business">Business name *</label>
+          <input id="inv-business" type="text" maxlength="100" required
+                 placeholder="Your business name">
+
+          <label for="inv-address">Business address</label>
+          <textarea id="inv-address" rows="3"
+                    placeholder="Street address&#10;City, region and postal code"></textarea>
+
+          <div class="cols-2">
+            <div>
+              <label for="inv-email">Email</label>
+              <input id="inv-email" type="email" maxlength="120"
+                     placeholder="hello@example.com">
+            </div>
+            <div>
+              <label for="inv-phone">Phone</label>
+              <input id="inv-phone" type="text" maxlength="60">
+            </div>
+          </div>
+
+          <label for="inv-logo">Business logo (optional)</label>
+          <input id="inv-logo" type="file"
+                 accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp">
+          <p class="hint">
+            PNG, JPG or WebP; maximum 1 MB. The image stays in this browser tab.
+          </p>
+          <button id="inv-remove-logo" class="btn" type="button">
+            Remove logo
+          </button>
+        </section>
+
+        <section class="panel" aria-labelledby="customer-heading">
+          <h2 id="customer-heading">Customer and invoice</h2>
+
+          <label for="inv-customer">Customer or company name *</label>
+          <input id="inv-customer" type="text" maxlength="100" required
+                 placeholder="Customer name">
+
+          <label for="inv-customer-address">Customer address</label>
+          <textarea id="inv-customer-address" rows="3"></textarea>
+
+          <div class="cols-2">
+            <div>
+              <label for="inv-number">Invoice number *</label>
+              <input id="inv-number" type="text" maxlength="40" required
+                     placeholder="INV-001">
+            </div>
+            <div>
+              <label for="inv-currency">Currency</label>
+              <select id="inv-currency">
+                <option value="USD">USD — US dollar</option>
+                <option value="GBP">GBP — British pound</option>
+                <option value="EUR">EUR — euro</option>
+                <option value="CAD">CAD — Canadian dollar</option>
+                <option value="AUD">AUD — Australian dollar</option>
+              </select>
+            </div>
+            <div>
+              <label for="inv-date">Issue date *</label>
+              <input id="inv-date" type="date" required>
+            </div>
+            <div>
+              <label for="inv-due">Due date *</label>
+              <input id="inv-due" type="date" required>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="items-heading">
+          <h2 id="items-heading">Line items</h2>
+          <p class="hint">
+            Enter a description, quantity and unit price for each item.
+          </p>
+
+          <div id="inv-items" class="editable-items"></div>
+
+          <div class="actions">
+            <button id="inv-add-item" class="btn" type="button">
+              Add item
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="totals-heading">
+          <h2 id="totals-heading">Totals and notes</h2>
+
+          <div class="cols-2">
+            <div>
+              <label for="inv-discount">Fixed discount</label>
+              <input id="inv-discount" type="number" min="0"
+                     max="1000000" step="0.01" value="0">
+            </div>
+            <div>
+              <label for="inv-tax">Tax rate (%)</label>
+              <input id="inv-tax" type="number" min="0"
+                     max="100" step="0.01" value="0">
+            </div>
+          </div>
+
+          <label for="inv-payment">Payment instructions</label>
+          <textarea id="inv-payment" rows="2"
+                    placeholder="How the customer should pay"></textarea>
+
+          <label for="inv-notes">Notes or terms</label>
+          <textarea id="inv-notes" rows="2"
+                    placeholder="Thank you for your business."></textarea>
+        </section>
+
+        <div class="actions document-actions">
+          <button id="inv-print" class="btn primary" type="button">
+            Print / Save as PDF
+          </button>
+        </div>
+
+        <p class="privacy-notice">
+          Privacy: Invoice details and uploaded logos are processed locally on
+          your device. This tool does not upload them or automatically save them.
+        </p>
+      </div>
+
+      <div class="document-preview-column">
+        <h2>Live preview</h2>
+        <p class="hint">Print output contains only the white invoice below.</p>
+
+        <article id="invoice-paper" class="document-paper invoice-paper"
+                 aria-label="Invoice preview">
+          <header class="invoice-heading">
+            <div>
+              <img id="out-inv-logo" class="invoice-logo" alt=""
+                   hidden>
+              <h2 id="out-inv-business"></h2>
+              <div id="out-inv-address" class="preserve-lines"></div>
+              <div id="out-inv-contact" class="preserve-lines"></div>
+            </div>
+            <div class="invoice-title-block">
+              <strong>INVOICE</strong>
+              <span id="out-inv-number"></span>
+            </div>
+          </header>
+
+          <div class="invoice-parties">
+            <section>
+              <h3>Bill to</h3>
+              <strong id="out-inv-customer"></strong>
+              <div id="out-inv-customer-address" class="preserve-lines"></div>
+            </section>
+
+            <section class="invoice-dates">
+              <div>
+                <span>Issue date</span>
+                <strong id="out-inv-date"></strong>
+              </div>
+              <div>
+                <span>Due date</span>
+                <strong id="out-inv-due"></strong>
+              </div>
+            </section>
+          </div>
+
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th scope="col">Description</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Unit price</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="out-inv-items"></tbody>
+          </table>
+
+          <div class="invoice-summary">
+            <div><span>Subtotal</span><strong id="out-inv-subtotal"></strong></div>
+            <div><span>Discount</span><strong id="out-inv-discount"></strong></div>
+            <div><span id="out-inv-tax-label">Tax</span><strong id="out-inv-tax"></strong></div>
+            <div class="invoice-grand-total">
+              <span>Total due</span><strong id="out-inv-total"></strong>
+            </div>
+          </div>
+
+          <div id="out-inv-payment-block" class="invoice-note" hidden>
+            <h3>Payment instructions</h3>
+            <p id="out-inv-payment" class="preserve-lines"></p>
+          </div>
+
+          <div id="out-inv-notes-block" class="invoice-note" hidden>
+            <h3>Notes</h3>
+            <p id="out-inv-notes" class="preserve-lines"></p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <section class="faq" aria-labelledby="inv-faq-heading">
+      <h2 id="inv-faq-heading">How it works & FAQ</h2>
+
+      <div class="panel">
+        <h3>How do I make an invoice?</h3>
+        <p>Enter your business and customer details, add line items, then review the live preview. Use Print / Save as PDF when it looks right.</p>
+      </div>
+
+      <div class="panel">
+        <h3>How are tax and discounts calculated?</h3>
+        <p>The fixed discount is deducted from the line-item subtotal first. The selected tax percentage is then applied to the remaining amount.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Is my invoice saved?</h3>
+        <p>No. This version does not automatically store your entries. Print or save the completed invoice before closing the tab.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="tools-footer"></div>
+</body>
+</html>
