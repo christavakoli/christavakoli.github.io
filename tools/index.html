@@ -4,14 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
-  <title>Private Browser Tools | PDFs, Images, Data, Text & QR Codes</title>
-  <meta name="description" content="Free browser-based PDF, image, JSON, CSV, text and QR tools. Your files stay on your device.">
+
+  <title>Private Browser Tools | PDFs, Images, Data, Text & More</title>
+  <meta name="description" content="Free browser-based PDF, image, JSON, CSV, text, QR, invoice and receipt tools. Your files stay on your device.">
+
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://christavakoli.com/tools/">
-  <meta property="og:title" content="Private Browser Tools | Christa Vakoli">
+  <meta property="og:title" content="Private Browser Tools">
   <meta property="og:description" content="Practical utilities that process your files locally in your browser.">
+
   <link rel="canonical" href="https://christavakoli.com/tools/">
   <link rel="stylesheet" href="../css/tools.css">
+
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -20,23 +24,86 @@
       "url": "https://christavakoli.com/tools/",
       "applicationCategory": "UtilitiesApplication",
       "operatingSystem": "Any modern browser",
-      "description": "Browser-based PDF, image, data, text and QR code utilities."
+      "description": "Browser-based PDF, image, data, text, QR, invoice and receipt utilities."
     }
   </script>
+
+  <style>
+    /* Small landing-page refinements; other tools are unaffected. */
+    .utility-site .tools-landing .hero {
+      max-width: 780px;
+      margin-bottom: 42px;
+    }
+
+    .utility-site .tools-landing .hero h1 {
+      max-width: 700px;
+    }
+
+    .utility-site .tools-landing .hero > p {
+      max-width: 680px;
+      margin-bottom: 26px;
+    }
+
+    .utility-site .tools-landing #tool-search {
+      max-width: 680px;
+    }
+
+    .utility-site .tools-landing .tool-grid {
+      align-items: stretch;
+    }
+
+    .utility-site .tools-landing .tool-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 185px;
+    }
+
+    .utility-site .tools-landing .tool-card h3 {
+      margin-bottom: 9px;
+    }
+
+    .utility-site .tools-landing .tool-card p {
+      line-height: 1.55;
+    }
+
+    .utility-site .tools-landing .card-icon {
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 620px) {
+      .utility-site .tools-landing .tool-card {
+        min-height: 0;
+      }
+    }
+  </style>
+
   <script src="../js/shared.js" defer></script>
 </head>
+
 <body class="utility-site" data-home="./">
   <div id="tools-header"></div>
 
-  <main class="wrap main-content">
-    <section class="hero">
-      <span class="trust-badge">100% Private — Files Never Leave Your Browser</span>
-      <h1>Useful tools. Your files stay yours.</h1>
-      <p>Organize PDFs, convert images, transform data, work with text, and generate QR codes—directly on your device.</p>
+  <main class="wrap main-content tools-landing">
+    <section class="hero" aria-labelledby="hero-heading">
+      <span class="trust-badge">
+        100% Private — Files Never Leave Your Browser
+      </span>
+
+      <h1 id="hero-heading">Useful tools. Your files stay yours.</h1>
+
+      <p>
+        Organize PDFs, convert images, transform data, work with text,
+        and create documents—all directly on your device.
+      </p>
 
       <label for="tool-search">Find a tool</label>
-      <input id="tool-search" type="search" autocomplete="off"
-             placeholder="Search PDF, images, CSV, text, QR…">
+      <input
+        id="tool-search"
+        type="search"
+        autocomplete="off"
+        placeholder="Search PDF, images, invoices, receipts…"
+      >
     </section>
 
     <!-- AD_SLOT_TOP: Paste an optional ad snippet inside this empty container. -->
@@ -44,75 +111,126 @@
 
     <section aria-labelledby="browse-heading">
       <h2 id="browse-heading">Explore tools</h2>
+
       <div class="tool-grid" id="tool-grid">
-        <a class="tool-card panel" href="./merge-pdf.html"
-           data-search="pdf merge split extract reorder pages images">
+        <a
+          class="tool-card panel"
+          href="./merge-pdf.html"
+          data-search="pdf merge split extract reorder pages images"
+        >
           <span class="card-icon" aria-hidden="true">▤</span>
           <h3>PDF tools</h3>
-          <p>Merge files, rearrange pages, extract ranges, and make PDFs from images.</p>
+          <p>
+            Merge files, rearrange pages, extract ranges, and make PDFs
+            from images.
+          </p>
         </a>
 
-        <a class="tool-card panel" href="./image-converter.html"
-           data-search="image convert png jpg jpeg webp avif resize compress exif zip">
+        <a
+          class="tool-card panel"
+          href="./image-converter.html"
+          data-search="image convert png jpg jpeg webp avif resize compress exif zip"
+        >
           <span class="card-icon" aria-hidden="true">▧</span>
           <h3>Image converter</h3>
-          <p>Convert, resize, compress, and download images individually or as a ZIP.</p>
+          <p>
+            Convert, resize, compress, and download images individually
+            or as a ZIP.
+          </p>
         </a>
 
-        <a class="tool-card panel" href="./json-csv.html"
-           data-search="json csv convert validate format preview table">
+        <a
+          class="tool-card panel"
+          href="./json-csv.html"
+          data-search="json csv convert validate format preview table"
+        >
           <span class="card-icon" aria-hidden="true">{ }</span>
-          <h3>JSON & CSV</h3>
-          <p>Convert data both ways, format JSON, and preview tables.</p>
+          <h3>JSON &amp; CSV</h3>
+          <p>
+            Convert data both ways, format JSON, and preview tables.
+          </p>
         </a>
 
-        <a class="tool-card panel" href="./text-tools.html"
-           data-search="text words characters reading time whitespace case diff compare">
+        <a
+          class="tool-card panel"
+          href="./text-tools.html"
+          data-search="text words characters reading time whitespace case diff compare"
+        >
           <span class="card-icon" aria-hidden="true">Aa</span>
           <h3>Text tools</h3>
-          <p>Count, clean, transform, and compare text.</p>
+          <p>
+            Count, clean, transform, and compare text.
+          </p>
         </a>
 
-        <a class="tool-card panel" href="./qr-generator.html"
-           data-search="qr code link url wifi wi-fi png svg">
+        <a
+          class="tool-card panel"
+          href="./qr-generator.html"
+          data-search="qr code link url wifi wi-fi png svg"
+        >
           <span class="card-icon" aria-hidden="true">▦</span>
           <h3>QR generator</h3>
-          <p>Create custom QR codes for links, text, and Wi-Fi.</p>
+          <p>
+            Create custom QR codes for links, text, and Wi-Fi.
+          </p>
+        </a>
+
+        <a
+          class="tool-card panel"
+          href="./invoice-maker.html"
+          data-search="invoice maker billing customer line items tax discount print pdf"
+        >
+          <span class="card-icon" aria-hidden="true">▤</span>
+          <h3>Invoice maker</h3>
+          <p>
+            Create customer invoices with editable items, tax, and discounts.
+          </p>
+        </a>
+
+        <a
+          class="tool-card panel"
+          href="./receipt-maker.html"
+          data-search="receipt maker store thermal paper barcode items tax print pdf"
+        >
+          <span class="card-icon" aria-hidden="true">▥</span>
+          <h3>Receipt maker</h3>
+          <p>
+            Make editable, store-style receipts with a thermal-paper preview.
+          </p>
         </a>
       </div>
-      <p id="no-results" class="subtle" hidden>No tools match your search.</p>
+
+      <p id="no-results" class="subtle" hidden>
+        No tools match your search.
+      </p>
     </section>
   </main>
 
-<a class="tool-card panel" href="./invoice-maker.html"
-   data-search="invoice maker billing customer line items tax discount print pdf">
-  <span class="card-icon" aria-hidden="true">▤</span>
-  <h3>Invoice maker</h3>
-  <p>Create customer invoices with editable items, tax and discounts.</p>
-</a>
-
-<a class="tool-card panel" href="./receipt-maker.html"
-   data-search="receipt maker store thermal paper barcode items tax print pdf">
-  <span class="card-icon" aria-hidden="true">▥</span>
-  <h3>Receipt maker</h3>
-  <p>Make editable, store-style receipts with a thermal-paper preview.</p>
-</a>
-  
   <div id="tools-footer"></div>
 
   <script>
-    document.getElementById("tool-search").addEventListener("input", function () {
-      const query = this.value.trim().toLowerCase();
-      let matches = 0;
+    document.getElementById("tool-search").addEventListener(
+      "input",
+      function () {
+        const query = this.value.trim().toLowerCase();
+        let matches = 0;
 
-      document.querySelectorAll(".tool-card").forEach(function (card) {
-        const searchable = (card.textContent + " " + card.dataset.search).toLowerCase();
-        card.hidden = !searchable.includes(query);
-        if (!card.hidden) matches++;
-      });
+        document.querySelectorAll(".tool-card").forEach(card => {
+          const searchable = (
+            card.textContent + " " + card.dataset.search
+          ).toLowerCase();
 
-      document.getElementById("no-results").hidden = matches !== 0;
-    });
+          card.hidden = !searchable.includes(query);
+
+          if (!card.hidden) {
+            matches++;
+          }
+        });
+
+        document.getElementById("no-results").hidden =
+          matches !== 0;
+      }
+    );
   </script>
 </body>
 </html>
