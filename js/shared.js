@@ -1,27 +1,28 @@
 "use strict";
 
 (() => {
-  // Every tool page is in /tools/, so links here remain relative on both
-  // christavakoli.com and a repository-based GitHub Pages URL.
   const home = document.body.dataset.home || "./";
-  const current = location.pathname.split("/").pop() || "index.html";
+  const current =
+    location.pathname.split("/").pop() || "index.html";
 
-const links = [
-  ["PDF", "merge-pdf.html"],
-  ["Images", "image-converter.html"],
-  ["JSON/CSV", "json-csv.html"],
-  ["Text", "text-tools.html"],
-  ["QR", "qr-generator.html"],
-  ["Invoices", "invoice-maker.html"],
-  ["Receipts", "receipt-maker.html"]
-];
+  const links = [
+    ["PDF", "merge-pdf.html"],
+    ["Images", "image-converter.html"],
+    ["JSON/CSV", "json-csv.html"],
+    ["Text", "text-tools.html"],
+    ["QR", "qr-generator.html"],
+    ["Invoices", "invoice-maker.html"],
+    ["Receipts", "receipt-maker.html"]
+  ];
 
   const header = document.getElementById("tools-header");
   const footer = document.getElementById("tools-footer");
 
   if (header) {
-    const nav = links.map(([label, file]) => {
-      const active = current === file ? ' aria-current="page"' : "";
+    const navLinks = links.map(([label, file]) => {
+      const active =
+        current === file ? ' aria-current="page"' : "";
+
       return `<a href="./${file}"${active}>${label}</a>`;
     }).join("");
 
@@ -31,12 +32,18 @@ const links = [
           <a class="brand" href="${home}">
             <span class="brand-mark">◆</span> Private Tools
           </a>
+
           <div class="nav-links">
             <a href="../index.html">Main site</a>
-            ${nav}
+            ${navLinks}
           </div>
-          <button class="btn" id="theme-toggle" type="button"
-                  aria-label="Switch between dark and light themes">
+
+          <button
+            class="btn"
+            id="theme-toggle"
+            type="button"
+            aria-label="Switch between dark and light themes"
+          >
             Theme
           </button>
         </nav>
@@ -47,8 +54,10 @@ const links = [
     footer.innerHTML = `
       <footer class="site-footer">
         <div class="wrap footer-inner">
-          <span>© ${new Date().getFullYear()} Christa Vakoli</span>
-          <span>Your files are processed locally. Tool libraries load from a CDN.</span>
+          <span>Private browser tools</span>
+          <span>
+            Your files are processed locally on your device.
+          </span>
         </div>
       </footer>`;
   }
@@ -58,19 +67,24 @@ const links = [
       document.body.dataset.theme = "light";
     }
   } catch (_) {
-    // A blocked storage API does not prevent the site from working.
+    // The default theme still works if storage is unavailable.
   }
 
-  document.getElementById("theme-toggle")?.addEventListener("click", () => {
-    const next = document.body.dataset.theme === "light" ? "dark" : "light";
-    document.body.dataset.theme = next;
+  document.getElementById("theme-toggle")
+    ?.addEventListener("click", () => {
+      const next =
+        document.body.dataset.theme === "light"
+          ? "dark"
+          : "light";
 
-    try {
-      localStorage.setItem("cv-tools-theme", next);
-    } catch (_) {
-      // Persisting the preference is optional.
-    }
-  });
+      document.body.dataset.theme = next;
+
+      try {
+        localStorage.setItem("cv-tools-theme", next);
+      } catch (_) {
+        // Saving the preference is optional.
+      }
+    });
 
   let toastTimeout;
 
@@ -87,7 +101,9 @@ const links = [
 
     element.textContent = message;
     element.hidden = false;
+
     clearTimeout(toastTimeout);
+
     toastTimeout = setTimeout(() => {
       element.hidden = true;
     }, 3500);
@@ -95,13 +111,17 @@ const links = [
 
   function showError(message) {
     const banner = document.getElementById("error-banner");
+
     if (!banner) return;
 
     banner.textContent = message;
     banner.hidden = !message;
 
     if (message) {
-      banner.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      banner.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+      });
     }
   }
 
@@ -111,17 +131,22 @@ const links = [
 
     anchor.href = url;
     anchor.download = filename;
+
     document.body.append(anchor);
     anchor.click();
     anchor.remove();
 
-    // Delay revocation: some browsers need the URL after click() returns.
-    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 60000);
   }
 
   function attachDropzone(zone, input, onFiles) {
     input.addEventListener("change", () => {
-      if (input.files.length) onFiles(Array.from(input.files));
+      if (input.files.length) {
+        onFiles(Array.from(input.files));
+      }
+
       input.value = "";
     });
 
@@ -148,12 +173,20 @@ const links = [
 
   async function copy(text) {
     if (!navigator.clipboard?.writeText) {
-      throw new Error("Clipboard access is unavailable in this browser.");
+      throw new Error(
+        "Clipboard access is unavailable in this browser."
+      );
     }
 
     await navigator.clipboard.writeText(text);
     toast("Copied to clipboard.");
   }
 
-  window.CVTools = { toast, showError, download, attachDropzone, copy };
+  window.CVTools = {
+    toast,
+    showError,
+    download,
+    attachDropzone,
+    copy
+  };
 })();
